@@ -73,7 +73,6 @@ function Hero() {
             key={mood.id}
             id="cine-title"
             className="cine-title"
-            style={{ fontFamily: mood.font }}
             initial={{ opacity: 0, y: 40, filter: 'blur(8px)' }}
             animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
             exit={{ opacity: 0, y: -30, filter: 'blur(8px)' }}
@@ -85,10 +84,10 @@ function Hero() {
         <p className="cine-sub">{mood.description}</p>
         <div className="cine-ctas">
           <Link to="/explore" className="cine-btn primary">
-            탐색 시작 <ArrowRight size={16} />
+            컬렉션 둘러보기 <ArrowRight size={16} />
           </Link>
           <Link to={`/product/${hero.slug}`} className="cine-btn">
-            이 상품 보기
+            대표 상품 보기
           </Link>
         </div>
       </div>
@@ -180,7 +179,7 @@ function ScrollStory() {
           </p>
           <AnimatePresence mode="wait">
             <motion.div key={p.id} initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.5, ease }}>
-              <h2 style={{ fontFamily: mood.font }}>{p.name}</h2>
+              <h2>{p.name}</h2>
               <p className="story-desc">{p.description}</p>
               <p className="story-price">{formatKRW(p.price)}</p>
               <Link to={`/product/${p.slug}`} className="cine-btn">
@@ -203,7 +202,7 @@ function CategoryEntrance() {
   return (
     <section className="cat-entrance container" aria-labelledby="cat-entrance-title">
       <div className="section-head">
-        <h2 id="cat-entrance-title">카테고리로 들어가기</h2>
+        <h2 id="cat-entrance-title">카테고리</h2>
         <Link to="/explore?view=list" className="link-underline">
           목록으로 보기
         </Link>
@@ -259,7 +258,7 @@ function MoodIndex() {
     >
       <div className="container">
         <h2 id="mood-index-title" className="cine-eyebrow">
-          분위기로 쇼핑하기
+          Shop by Mood
         </h2>
         <ul>
           {MOODS.map((m, i) => (
@@ -328,7 +327,7 @@ export default function Landing() {
       <MoodIndex />
       <div className="landing-explore container">
         <MousePointerClick size={28} strokeWidth={1.4} />
-        <p>상품을 자유롭게 끌어보고, 장바구니로 던져 넣어보세요.</p>
+        <p>마음에 드는 옷을 끌어다 장바구니에 담아보세요.</p>
         <Link to="/explore" className="cine-btn primary">
           탐색 캔버스 열기 <ArrowRight size={16} />
         </Link>

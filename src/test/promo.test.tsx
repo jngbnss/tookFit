@@ -28,7 +28,7 @@ describe('promo popup and announcement', () => {
     expect(isPromoHidden()).toBe(true);
     first.unmount();
     renderApp('/');
-    await screen.findByRole('heading', { level: 1, name: /덜어낼수록 선명해진다/ });
+    await screen.findByRole('heading', { level: 1, name: /적게, 그러나 정확하게/ });
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);

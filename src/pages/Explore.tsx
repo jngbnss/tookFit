@@ -162,11 +162,11 @@ export default function Explore() {
   return (
     <div className="mood-scope explore" style={{ ...moodStyle(scoped), background: scoped.bg, color: scoped.ink }}>
       <div className="container explore-head">
-        <h1 className="explore-title" style={{ fontFamily: scoped.font }}>
+        <h1 className="explore-title" style={activeMood ? { fontFamily: activeMood.font } : undefined}>
           {activeMood ? activeMood.label : category ? CATEGORIES.find((c) => c.slug === category)?.label : '탐색'}
         </h1>
         <p className="explore-sub">
-          {view === 'canvas' ? '카드를 끌어 위치를 바꾸고, 오른쪽 아래 장바구니로 끌어다 놓으면 바로 담겨요.' : '익숙한 목록 보기로 빠르게 찾아보세요.'}
+          {view === 'canvas' ? '카드를 자유롭게 옮기고, 장바구니로 끌어다 놓아 담아보세요.' : '목록으로 한눈에 비교해 보세요.'}
         </p>
 
         <div className="explore-toolbar">

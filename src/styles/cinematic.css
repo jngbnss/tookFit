@@ -79,16 +79,19 @@
   z-index: 2;
 }
 .cine-title {
-  font-size: clamp(40px, 6.4vw, 96px);
-  line-height: 1.02;
-  letter-spacing: -0.03em;
-  font-weight: 600;
+  font-family: var(--font-kr-display);
+  font-size: clamp(36px, 5.2vw, 76px);
+  line-height: 1.12;
+  letter-spacing: -0.045em;
+  font-weight: 300;
   word-break: keep-all;
 }
 .cine-sub {
-  max-width: 420px;
-  font-size: 16px;
-  opacity: 0.78;
+  max-width: 400px;
+  font-size: 15px;
+  line-height: 1.7;
+  letter-spacing: -0.01em;
+  opacity: 0.7;
 }
 .cine-ctas {
   display: flex;
@@ -280,8 +283,11 @@
   align-content: center;
 }
 .story-copy h2 {
-  font-size: clamp(32px, 4.4vw, 64px);
-  line-height: 1.05;
+  font-family: var(--font-kr-display);
+  font-weight: 300;
+  letter-spacing: -0.04em;
+  font-size: clamp(30px, 3.8vw, 54px);
+  line-height: 1.1;
   margin: var(--s3) 0;
   word-break: keep-all;
 }
@@ -509,7 +515,9 @@
   gap: var(--s3);
 }
 .explore-title {
-  font-size: clamp(44px, 8vw, 110px);
+  font-family: var(--font-kr-display);
+  font-weight: 300;
+  font-size: clamp(40px, 7vw, 96px);
   line-height: 0.95;
   letter-spacing: -0.03em;
 }
@@ -804,7 +812,9 @@
   max-width: 440px;
 }
 .pdp-story-copy h2 {
-  font-family: var(--font-display);
+  font-family: var(--font-kr-display);
+  font-weight: 300;
+  letter-spacing: -0.035em;
   font-size: clamp(28px, 3.4vw, 44px);
   word-break: keep-all;
 }
