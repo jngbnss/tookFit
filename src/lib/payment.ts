@@ -16,9 +16,9 @@ export interface PaymentRequest {
 }
 
 export const METHOD_LABELS: Record<PaymentMethod, string> = {
-  card: 'Credit / debit card',
-  kakaopay: 'Kakao Pay',
-  naverpay: 'Naver Pay',
+  card: '신용·체크카드',
+  kakaopay: '카카오페이',
+  naverpay: '네이버페이',
 };
 
 /** Mock payment gateway. Resolves locally after a short delay; makes no network calls. */
@@ -29,7 +29,7 @@ export function processPayment(req: PaymentRequest, delayMs = 1200): Promise<Pay
       if (req.method === 'card') {
         const digits = digitsOnly(req.cardNumber ?? '');
         if (digits === DECLINE_CARD) {
-          resolve({ ok: false, reason: 'Your card was declined by the issuer (simulated). Try another card.' });
+          resolve({ ok: false, reason: '카드사에서 결제를 거절했습니다(시뮬레이션). 다른 카드를 사용해 주세요.' });
           return;
         }
         resolve({ ok: true, method: 'card', label: METHOD_LABELS.card, last4: digits.slice(-4), reference });

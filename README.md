@@ -1,8 +1,8 @@
-# T.O.O.K FIT — Storefront Demo
+# TUK FIT — Storefront Demo
 
-A responsive, accessible frontend e-commerce demo for **T.O.O.K FIT**, a modern Korean-inspired men’s fall/winter label.
+A responsive, accessible frontend e-commerce demo for **TUK FIT**, a modern Korean-inspired men’s fall/winter label.
 
-**Live demo:** https://jngbnss.github.io/tookFit/
+**Live demo:** https://jngbnss.github.io/tukFit/
 
 > **Frontend-only demonstration.** No real payments, orders, inventory, or accounts are processed. Authentication and payment are simulated in the browser and offer no production security. Use sample information only.
 
@@ -52,7 +52,7 @@ Covers cart quantities and variant separation, totals, coupon cap, shipping thre
 ## Production build
 
 ```bash
-npm run build      # outputs dist/ with base /tookFit/
+npm run build      # outputs dist/ with base /tukFit/
 npm run preview
 ```
 
@@ -67,7 +67,7 @@ npm run preview
 | Successful card | `4242 4242 4242 4242`, any future expiry (e.g. `12/30`), any 3-digit CVC |
 | Declined card | `4000 0000 0000 0002` |
 | Other cards | Any Luhn-valid 16-digit number succeeds |
-| Coupon | `TOOK10` — 10% off merchandise, max ₩20,000 |
+| Coupon | `TUK10` — 10% off merchandise, max ₩20,000 |
 | Shipping | ₩3,000; free at ₩100,000+ merchandise subtotal (before coupon) |
 
 Prices are in KRW and include VAT. Card number, expiry, and CVC exist only in component state during checkout; orders store at most the last four digits.

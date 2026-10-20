@@ -12,13 +12,13 @@ interface Props {
   mode?: 'full' | 'quick';
   onAdded?: () => void;
   onSizeGuide?: () => void;
-  initialColor?: string;
+  onColorChange?: (colorId: string) => void;
 }
 
-export function PurchasePanel({ product, mode = 'full', onAdded, onSizeGuide, initialColor }: Props) {
+export function PurchasePanel({ product, mode = 'full', onAdded, onSizeGuide, onColorChange }: Props) {
   const { addToCart, notify, toggleWishlist, isWishlisted, setCartOpen } = useStore();
   const navigate = useNavigate();
-  const [colorId, setColorId] = useState<string | null>(initialColor ?? null);
+  const [colorId, setColorId] = useState<string | null>(null);
   const [size, setSize] = useState<string | null>(null);
   const [quantity, setQuantity] = useState(1);
   const [errors, setErrors] = useState<{ color?: string; size?: string; form?: string }>({});
@@ -36,6 +36,7 @@ export function PurchasePanel({ product, mode = 'full', onAdded, onSizeGuide, in
 
   function chooseColor(id: string) {
     setColorId(id);
+    onColorChange?.(id);
     setErrors((e) => ({ ...e, color: undefined, form: undefined }));
     if (size && variantStock(product, id, size) <= 0) setSize(null);
     setQuantity(1);
@@ -49,8 +50,8 @@ export function PurchasePanel({ product, mode = 'full', onAdded, onSizeGuide, in
 
   function submit(buyNow: boolean) {
     const next: typeof errors = {};
-    if (!colorId) next.color = 'Please select a color.';
-    if (!size) next.size = 'Please select a size.';
+    if (!colorId) next.color = '색상을 선택해 주세요.';
+    if (!size) next.size = '사이즈를 선택해 주세요.';
     if (next.color || next.size) {
       setErrors(next);
       document.getElementById(`${uid}-${next.color ? 'color' : 'size'}`)?.focus();
@@ -67,10 +68,8 @@ export function PurchasePanel({ product, mode = 'full', onAdded, onSizeGuide, in
       return;
     }
     notify(
-      result.capped
-        ? `Added — quantity limited to ${result.quantity} for this option.`
-        : `${product.name} (${colorName}, ${size}) added to your bag.`,
-      { label: 'View bag', to: '/cart' },
+      result.capped ? `담겼습니다. 이 옵션은 최대 ${result.quantity}개까지 구매할 수 있어요.` : `${product.name} (${colorName}, ${size})을(를) 장바구니에 담았습니다.`,
+      { label: '장바구니 보기', to: '/cart' },
     );
     onAdded?.();
     if (mode === 'full') setCartOpen(true);
@@ -78,16 +77,14 @@ export function PurchasePanel({ product, mode = 'full', onAdded, onSizeGuide, in
 
   function wish() {
     const added = toggleWishlist(product.id);
-    notify(added ? `${product.name} saved to your wishlist.` : `${product.name} removed from your wishlist.`, added ? { label: 'View wishlist', to: '/wishlist' } : undefined);
+    notify(added ? `${product.name}을(를) 위시리스트에 저장했습니다.` : `${product.name}을(를) 위시리스트에서 삭제했습니다.`, added ? { label: '위시리스트 보기', to: '/wishlist' } : undefined);
   }
 
   return (
     <div className="stack">
       <div>
         <p className="option-label">
-          <span id={`${uid}-color-label`}>
-            Color{colorName ? `: ${colorName}` : ''}
-          </span>
+          <span id={`${uid}-color-label`}>색상{colorName ? `: ${colorName}` : ''}</span>
         </p>
         <div
           className="swatches"
@@ -121,10 +118,10 @@ export function PurchasePanel({ product, mode = 'full', onAdded, onSizeGuide, in
 
       <div>
         <p className="option-label">
-          <span id={`${uid}-size-label`}>Size{size ? `: ${size}` : ''}</span>
+          <span id={`${uid}-size-label`}>사이즈{size ? `: ${size}` : ''}</span>
           {onSizeGuide && (
             <button type="button" className="btn-text" onClick={onSizeGuide}>
-              Size guide
+              사이즈 가이드
             </button>
           )}
         </p>
@@ -147,7 +144,7 @@ export function PurchasePanel({ product, mode = 'full', onAdded, onSizeGuide, in
                 aria-checked={size === s}
                 className="size-option"
                 disabled={!available}
-                aria-label={available ? s : `${s}, sold out`}
+                aria-label={available ? s : `${s}, 품절`}
                 onClick={() => chooseSize(s)}
               >
                 {s}
@@ -164,29 +161,29 @@ export function PurchasePanel({ product, mode = 'full', onAdded, onSizeGuide, in
 
       <p className="stock-note" aria-live="polite">
         {stock === null ? (
-          <span className="muted">Select a color and size to see availability.</span>
+          <span className="muted">색상과 사이즈를 선택하면 재고를 확인할 수 있어요.</span>
         ) : stock === 0 ? (
-          <span className="stock-low">Sold out in this option.</span>
+          <span className="stock-low">선택한 옵션은 품절입니다.</span>
         ) : stock <= 3 ? (
-          <span className="stock-low">Only {stock} left in this option.</span>
+          <span className="stock-low">이 옵션은 {stock}개 남았어요.</span>
         ) : (
-          <span>In stock — ships in 1–2 business days.</span>
+          <span>재고 있음 · 영업일 기준 1~2일 내 출고</span>
         )}
       </p>
 
       <div>
         <p className="option-label">
-          <span id={`${uid}-qty`}>Quantity</span>
-          <span className="muted">Max {max} per option</span>
+          <span id={`${uid}-qty`}>수량</span>
+          <span className="muted">옵션당 최대 {max}개</span>
         </p>
         <div className="qty" role="group" aria-labelledby={`${uid}-qty`}>
-          <button type="button" aria-label="Decrease quantity" onClick={() => setQuantity((q) => Math.max(1, q - 1))} disabled={quantity <= 1}>
+          <button type="button" aria-label="수량 줄이기" onClick={() => setQuantity((q) => Math.max(1, q - 1))} disabled={quantity <= 1}>
             −
           </button>
-          <output aria-live="polite" aria-label={`Quantity ${quantity}`}>
+          <output aria-live="polite" aria-label={`수량 ${quantity}`}>
             {quantity}
           </output>
-          <button type="button" aria-label="Increase quantity" onClick={() => setQuantity((q) => Math.min(max, q + 1))} disabled={quantity >= max}>
+          <button type="button" aria-label="수량 늘리기" onClick={() => setQuantity((q) => Math.min(max, q + 1))} disabled={quantity >= max}>
             +
           </button>
         </div>
@@ -200,14 +197,14 @@ export function PurchasePanel({ product, mode = 'full', onAdded, onSizeGuide, in
 
       <div className="pdp-actions" style={mode === 'quick' ? { gridTemplateColumns: '1fr' } : undefined}>
         <button type="button" className="btn btn-primary" onClick={() => submit(false)} disabled={stock === 0}>
-          Add to bag
+          장바구니 담기
         </button>
         {mode === 'full' && (
           <>
             <button type="button" className="btn btn-secondary" onClick={() => submit(true)} disabled={stock === 0}>
-              Buy now
+              바로 구매
             </button>
-            <button type="button" className="icon-btn" style={{ border: '1px solid var(--line-strong)', height: 48, width: 48 }} aria-pressed={wished} aria-label={wished ? 'Remove from wishlist' : 'Add to wishlist'} onClick={wish}>
+            <button type="button" className="icon-btn" style={{ border: '1px solid var(--line-strong)', height: 48, width: 48 }} aria-pressed={wished} aria-label={wished ? '위시리스트에서 삭제' : '위시리스트에 추가'} onClick={wish}>
               <HeartIcon filled={wished} />
             </button>
           </>
@@ -215,13 +212,13 @@ export function PurchasePanel({ product, mode = 'full', onAdded, onSizeGuide, in
       </div>
 
       {mode === 'full' && (
-        <div className="sticky-buy" aria-label="Quick purchase">
+        <div className="sticky-buy" aria-label="빠른 구매">
           <div style={{ fontSize: 13 }}>
             <div>{product.name}</div>
             <Price product={product} />
           </div>
           <button type="button" className="btn btn-primary" onClick={() => submit(false)} disabled={stock === 0}>
-            Add · {formatKRW(product.price * quantity)}
+            담기 · {formatKRW(product.price * quantity)}
           </button>
         </div>
       )}

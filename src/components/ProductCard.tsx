@@ -4,6 +4,7 @@ import type { Product } from '../domain/types';
 import { useStore } from '../state/store';
 import { asset } from '../lib/format';
 import { HeartIcon } from './Icons';
+import { BADGE_LABELS } from '../data/products';
 import { Price } from './Price';
 import { SmartImage } from './SmartImage';
 import { Dialog } from './Overlay';
@@ -21,21 +22,21 @@ export function ProductCard({ product, eager = false }: { product: Product; eage
         {product.images[1] && (
           <img className="secondary" src={asset(product.images[1].src)} alt="" aria-hidden="true" loading="lazy" width={1024} height={1280} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
         )}
-        {product.badge && <span className={`card-badge ${product.badge === 'SALE' ? 'sale' : ''}`}>{product.badge}</span>}
+        {product.badge && <span className={`card-badge ${product.badge === 'SALE' ? 'sale' : ''}`}>{BADGE_LABELS[product.badge]}</span>}
         <button
           type="button"
           className="icon-btn card-wish"
           aria-pressed={wished}
-          aria-label={wished ? `Remove ${product.name} from wishlist` : `Add ${product.name} to wishlist`}
+          aria-label={wished ? `${product.name} 위시리스트에서 삭제` : `${product.name} 위시리스트에 추가`}
           onClick={() => {
             const added = toggleWishlist(product.id);
-            notify(added ? `${product.name} saved to your wishlist.` : `${product.name} removed from your wishlist.`, added ? { label: 'View', to: '/wishlist' } : undefined);
+            notify(added ? `${product.name}을(를) 위시리스트에 저장했습니다.` : `${product.name}을(를) 위시리스트에서 삭제했습니다.`, added ? { label: '보기', to: '/wishlist' } : undefined);
           }}
         >
           <HeartIcon filled={wished} />
         </button>
-        <button type="button" className="card-quick" onClick={() => setQuickOpen(true)} aria-label={`Quick add ${product.name}`}>
-          Quick add
+        <button type="button" className="card-quick" onClick={() => setQuickOpen(true)} aria-label={`${product.name} 빠른 담기`}>
+          빠른 담기
         </button>
       </div>
       <div className="card-info">
@@ -43,7 +44,7 @@ export function ProductCard({ product, eager = false }: { product: Product; eage
           <Link to={`/product/${product.slug}`}>{product.name}</Link>
         </h3>
         <Price product={product} />
-        <div className="card-swatches" aria-label={`Available in ${product.colors.map((c) => c.name).join(', ')}`}>
+        <div className="card-swatches" aria-label={`색상: ${product.colors.map((c) => c.name).join(', ')}`}>
           {product.colors.map((c) => (
             <span key={c.id} className="swatch-dot" style={{ background: c.hex }} />
           ))}
@@ -54,7 +55,7 @@ export function ProductCard({ product, eager = false }: { product: Product; eage
           <Price product={product} />
           <PurchasePanel product={product} mode="quick" onAdded={() => setQuickOpen(false)} />
           <Link className="btn-text" to={`/product/${product.slug}`} onClick={() => setQuickOpen(false)}>
-            View full details
+            상세 정보 보기
           </Link>
         </div>
       </Dialog>
@@ -76,7 +77,7 @@ export function ProductGrid({ products, eagerCount = 0 }: { products: Product[];
 
 export function SkeletonGrid({ count = 8 }: { count?: number }) {
   return (
-    <ul className="grid" aria-busy="true" aria-label="Loading products">
+    <ul className="grid" aria-busy="true" aria-label="상품 불러오는 중">
       {Array.from({ length: count }, (_, i) => (
         <li key={i} className="skeleton-card">
           <div className="sk-img skeleton" />

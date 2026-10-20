@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-const BRAND = 'T.O.O.K FIT';
+const BRAND = 'TUK FIT';
 
 function setMeta(attr: 'name' | 'property', key: string, content: string) {
   let el = document.head.querySelector<HTMLMetaElement>(`meta[${attr}="${key}"]`);
@@ -16,7 +16,7 @@ function setMeta(attr: 'name' | 'property', key: string, content: string) {
 export function usePageMeta(title: string, description?: string, jsonLd?: object) {
   const ld = jsonLd ? JSON.stringify(jsonLd) : null;
   useEffect(() => {
-    const full = title ? `${title} | ${BRAND}` : `${BRAND} — Men's Fall/Winter Collection`;
+    const full = title ? `${title} | ${BRAND}` : `${BRAND} — 남성 F/W 컬렉션`;
     document.title = full;
     setMeta('property', 'og:title', full);
     if (description) {

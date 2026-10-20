@@ -17,7 +17,7 @@ export function Dialog({ open, onClose, title, children, wide = false }: BasePro
     <>
       <div className="overlay" onClick={onClose} aria-hidden="true" />
       <div ref={ref} className={`dialog ${wide ? 'dialog-wide' : ''}`} role="dialog" aria-modal="true" aria-labelledby={id} tabIndex={-1}>
-        <button type="button" className="icon-btn dialog-close" onClick={onClose} aria-label="Close dialog">
+        <button type="button" className="icon-btn dialog-close" onClick={onClose} aria-label="닫기">
           <CloseIcon />
         </button>
         <h2 id={id}>{title}</h2>
@@ -44,7 +44,7 @@ export function Drawer({
       <div ref={ref} className={`drawer drawer-${side}`} role="dialog" aria-modal="true" aria-labelledby={id} tabIndex={-1}>
         <div className="drawer-head">
           <h2 id={id}>{title}</h2>
-          <button type="button" className="icon-btn" onClick={onClose} aria-label={`Close ${title.toLowerCase()}`}>
+          <button type="button" className="icon-btn" onClick={onClose} aria-label={`${title} 닫기`}>
             <CloseIcon />
           </button>
         </div>

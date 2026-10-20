@@ -23,6 +23,7 @@ export interface ColorOption {
 export interface ProductImage {
   src: string;
   alt: string;
+  colorId?: string;
 }
 
 export interface Product {
@@ -87,7 +88,7 @@ export interface OrderLine {
   unitPrice: number;
 }
 
-export type OrderStatus = 'Processing' | 'Preparing shipment' | 'Shipped' | 'Delivered';
+export type OrderStatus = '결제 완료' | '배송 준비중' | '배송중' | '배송 완료';
 
 /** Non-sensitive order snapshot. Never contains card data. */
 export interface Order {

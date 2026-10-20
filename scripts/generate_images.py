@@ -1,4 +1,4 @@
-"""Procedural product and editorial artwork for the T.O.O.K FIT demo store.
+"""Procedural product and editorial artwork for the TUK FIT demo store.
 
 These are original, code-drawn studio illustrations (not photographs and not
 AI-generated). They are deterministic: running the script again produces the
@@ -44,40 +44,40 @@ BACKDROPS = [
     ((222, 221, 217), (205, 204, 199)),
 ]
 
-# slug, kind, (primary color, secondary color)
+# slug, kind, (every color id offered for the product)
 PRODUCTS = [
-    ("ardent-wool-overcoat", "coat", ("black", "camel")),
-    ("northline-down-puffer", "puffer", ("black", "olive")),
+    ("ardent-wool-overcoat", "coat", ("black", "camel", "charcoal")),
+    ("northline-down-puffer", "puffer", ("black", "olive", "navy")),
     ("meridian-leather-bomber", "bomber", ("black", "brown")),
-    ("sable-suede-blouson", "blouson", ("brown", "sand")),
-    ("fieldwork-quilted-jacket", "quilted", ("olive", "navy")),
-    ("stratus-technical-parka", "parka", ("charcoal", "olive")),
-    ("harbor-cable-knit-sweater", "cable", ("cream", "navy")),
-    ("linea-mock-neck-knit", "mockneck", ("black", "cream")),
+    ("sable-suede-blouson", "blouson", ("brown", "sand", "olive")),
+    ("fieldwork-quilted-jacket", "quilted", ("olive", "navy", "black")),
+    ("stratus-technical-parka", "parka", ("charcoal", "olive", "black")),
+    ("harbor-cable-knit-sweater", "cable", ("cream", "navy", "charcoal")),
+    ("linea-mock-neck-knit", "mockneck", ("black", "cream", "gray")),
     ("atelier-shawl-cardigan", "cardigan", ("brown", "charcoal")),
-    ("ridge-half-zip-knit", "halfzip", ("navy", "gray")),
-    ("loft-brushed-mohair-crew", "mohair", ("gray", "cream")),
-    ("base-heavyweight-sweatshirt", "sweatshirt", ("gray", "black")),
-    ("studio-long-sleeve-tee", "longtee", ("white", "charcoal")),
-    ("campus-oxford-shirt", "shirt", ("blue", "white")),
-    ("quarry-flannel-overshirt", "overshirt", ("brown", "olive")),
-    ("echo-waffle-henley", "henley", ("cream", "charcoal")),
-    ("avenue-wide-wool-trousers", "widetrousers", ("charcoal", "brown")),
-    ("harlow-corduroy-pants", "corduroy", ("brown", "cream")),
-    ("terrain-cargo-pants", "cargo", ("olive", "black")),
+    ("ridge-half-zip-knit", "halfzip", ("navy", "gray", "olive")),
+    ("loft-brushed-mohair-crew", "mohair", ("gray", "cream", "brown")),
+    ("base-heavyweight-sweatshirt", "sweatshirt", ("gray", "black", "cream")),
+    ("studio-long-sleeve-tee", "longtee", ("white", "charcoal", "black")),
+    ("campus-oxford-shirt", "shirt", ("blue", "white", "cream")),
+    ("quarry-flannel-overshirt", "overshirt", ("brown", "olive", "charcoal")),
+    ("echo-waffle-henley", "henley", ("cream", "charcoal", "olive")),
+    ("avenue-wide-wool-trousers", "widetrousers", ("charcoal", "brown", "black")),
+    ("harlow-corduroy-pants", "corduroy", ("brown", "cream", "navy")),
+    ("terrain-cargo-pants", "cargo", ("olive", "black", "sand")),
     ("ash-washed-denim", "denim", ("washed-black", "denim")),
-    ("rest-fleece-sweatpants", "sweatpants", ("gray", "navy")),
-    ("pleat-tapered-chinos", "chinos", ("sand", "navy")),
+    ("rest-fleece-sweatpants", "sweatpants", ("gray", "navy", "black")),
+    ("pleat-tapered-chinos", "chinos", ("sand", "navy", "black")),
     ("hearth-knit-lounge-set", "knitset", ("cream", "gray")),
     ("transit-tracksuit-set", "tracksuit", ("black", "navy")),
     ("column-flannel-two-piece", "suitset", ("charcoal", "navy")),
     ("clerk-leather-derby", "derby", ("black", "brown")),
-    ("frost-winter-sneaker", "sneaker", ("cream", "black")),
+    ("frost-winter-sneaker", "sneaker", ("cream", "black", "gray")),
     ("moor-chelsea-boots", "boot", ("black", "brown")),
     ("commute-nylon-crossbody", "crossbody", ("black", "olive")),
     ("market-canvas-tote", "tote", ("cream", "black")),
-    ("drift-cashmere-blend-scarf", "scarf", ("charcoal", "camel")),
-    ("dock-ribbed-beanie", "beanie", ("black", "olive")),
+    ("drift-cashmere-blend-scarf", "scarf", ("charcoal", "camel", "cream")),
+    ("dock-ribbed-beanie", "beanie", ("black", "olive", "gray", "cream")),
 ]
 
 
@@ -544,11 +544,13 @@ def main():
     OUT.mkdir(parents=True, exist_ok=True)
     EDITORIAL.mkdir(parents=True, exist_ok=True)
     random.seed(7)
+    for old in OUT.glob("*.webp"):
+        old.unlink()
     for i, (slug, kind, colors) in enumerate(PRODUCTS):
-        for v in (1, 2):
-            img = render_product(slug, kind, colors[v - 1], v, i)
-            path = OUT / f"{slug}-0{v}.webp"
-            img.save(path, "WEBP", quality=80, method=6)
+        for ci, color in enumerate(colors):
+            for v in (1, 2):
+                img = render_product(slug, kind, color, v, i + ci)
+                img.save(OUT / f"{slug}-{color}-0{v}.webp", "WEBP", quality=80, method=6)
     fb = backdrop((W, H), 1)
     d = ImageDraw.Draw(fb)
     d.rectangle([W * 0.42, H * 0.42, W * 0.58, H * 0.42 + 2], fill=(150, 146, 138))

@@ -1,12 +1,21 @@
-import { PRODUCTS } from '../data/products';
+import { CATEGORIES, PRODUCTS } from '../data/products';
 import type { CatalogQuery, CategorySlug, CollectionSlug, Product, SortKey } from '../domain/types';
 import { isInStock } from './pricing';
 
+const CATEGORY_LABELS = Object.fromEntries(CATEGORIES.map((c) => [c.slug, c.label])) as Record<string, string>;
 const byId = new Map(PRODUCTS.map((p) => [p.id, p]));
 const bySlug = new Map(PRODUCTS.map((p) => [p.slug, p]));
 
 export const getProduct = (id: string) => byId.get(id);
 export const getProductBySlug = (slug: string) => bySlug.get(slug);
+
+/** Gallery images for one color, falling back to the product's first color. */
+export function imagesFor(p: Product, colorId?: string | null): Product['images'] {
+  const list = p.images.filter((i) => i.colorId === (colorId ?? p.colors[0].id));
+  return list.length ? list : p.images.filter((i) => i.colorId === p.colors[0].id);
+}
+
+export const primaryImage = (p: Product, colorId?: string | null) => imagesFor(p, colorId)[0];
 
 export const NEW_ARRIVALS_SINCE = '2026-09-25';
 
@@ -28,7 +37,7 @@ export function inCollection(p: Product, collection: CollectionSlug): boolean {
 export function matchesSearch(p: Product, q: string): boolean {
   const terms = q.trim().toLowerCase().split(/\s+/).filter(Boolean);
   if (!terms.length) return true;
-  const hay = `${p.name} ${p.category} ${p.description} ${p.colors.map((c) => c.name).join(' ')}`.toLowerCase();
+  const hay = `${p.name} ${p.slug.replace(/-/g, ' ')} ${p.category} ${CATEGORY_LABELS[p.category]} ${p.description} ${p.colors.map((c) => c.name).join(' ')}`.toLowerCase();
   return terms.every((t) => hay.includes(t));
 }
 

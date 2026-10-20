@@ -7,16 +7,16 @@ export function Price({ product, className = '' }: { product: Pick<Product, 'pri
   return (
     <p className={`price ${className}`}>
       <span>
-        <span className="sr-only">{pct ? 'Sale price ' : 'Price '}</span>
+        <span className="sr-only">{pct ? '할인가 ' : '가격 '}</span>
         {formatKRW(product.price)}
       </span>
       {pct > 0 && product.originalPrice && (
         <>
           <s>
-            <span className="sr-only">Original price </span>
+            <span className="sr-only">정상가 </span>
             {formatKRW(product.originalPrice)}
           </s>
-          <span className="pct">{pct}% off</span>
+          <span className="pct">{pct}%</span>
         </>
       )}
     </p>

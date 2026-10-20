@@ -49,7 +49,7 @@ describe('cart store', () => {
     act(() => {
       res = result.current.addToCart(p.id, sold.color.id, sold.size, 1);
     });
-    expect(res).toEqual({ ok: false, reason: expect.stringMatching(/sold out/i) });
+    expect(res).toEqual({ ok: false, reason: expect.stringMatching(/품절/) });
 
     const low = Object.entries(p.stock).flatMap(([c, sizes]) => Object.entries(sizes).filter(([, n]) => n > 0 && n < 5).map(([s, n]) => ({ c, s, n })))[0];
     if (low) {
@@ -65,7 +65,7 @@ describe('cart store', () => {
     const v = findVariant(p);
     const first = setup();
     act(() => void first.result.current.addToCart(p.id, v.color.id, v.size, 2));
-    act(() => void first.result.current.applyCoupon('took10'));
+    act(() => void first.result.current.applyCoupon('tuk10'));
     act(() => void first.result.current.toggleWishlist('tf-ac-02'));
     first.unmount();
 
@@ -74,7 +74,7 @@ describe('cart store', () => {
 
     const second = setup();
     expect(second.result.current.cart[0]).toMatchObject({ productId: p.id, quantity: 2 });
-    expect(second.result.current.coupon).toBe('TOOK10');
+    expect(second.result.current.coupon).toBe('TUK10');
     expect(second.result.current.totals.discount).toBe(Math.min(20000, Math.floor(p.price * 2 * 0.1)));
     expect(second.result.current.isWishlisted('tf-ac-02')).toBe(true);
     act(() => void second.result.current.toggleWishlist('tf-ac-02'));

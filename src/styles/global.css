@@ -11,8 +11,8 @@
   --success: #2f5d3a;
   --focus: #1d4ed8;
 
-  --font-display: 'Cormorant Garamond', 'Times New Roman', Georgia, serif;
-  --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: 'Cormorant Garamond', 'Noto Serif KR', 'Times New Roman', Georgia, serif;
+  --font-body: 'Inter', 'Noto Sans KR', system-ui, -apple-system, 'Segoe UI', sans-serif;
 
   --s1: 4px;
   --s2: 8px;
@@ -74,6 +74,7 @@ body {
 img {
   display: block;
   max-width: 100%;
+  height: auto;
 }
 
 a {
@@ -406,8 +407,8 @@ ul {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  width: min(400px, calc(100vw - 32px));
-  max-height: calc(100vh - 32px);
+  width: min(360px, calc(100vw - 48px));
+  max-height: calc(100vh - 48px);
   overflow-y: auto;
   background: var(--bg);
   padding: var(--s4);
@@ -417,8 +418,9 @@ ul {
 }
 .promo-media img {
   width: 100%;
-  aspect-ratio: 4 / 3;
+  height: clamp(120px, 22vh, 180px);
   object-fit: cover;
+  object-position: 50% 35%;
   background: var(--surface-2);
 }
 .promo-copy {
@@ -428,7 +430,7 @@ ul {
 }
 .promo-copy h2 {
   font-family: var(--font-display);
-  font-size: 30px;
+  font-size: 24px;
 }
 .promo-dots {
   display: flex;
@@ -657,6 +659,7 @@ ul {
 .hero picture img {
   width: 100%;
   aspect-ratio: 16 / 9;
+  max-height: min(72vh, 760px);
   object-fit: cover;
 }
 .hero-copy {
@@ -925,12 +928,23 @@ ul {
   gap: var(--s6);
 }
 .filters-desktop {
-  position: sticky;
-  top: calc(var(--header-h) + 60px);
   align-self: start;
-  max-height: calc(100vh - 140px);
-  overflow-y: auto;
-  padding-right: var(--s2);
+}
+.filters-desktop .size-grid,
+.drawer .size-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+.filters-desktop .size-toggle,
+.drawer .size-toggle {
+  min-width: 0;
+  padding: 0;
+  font-size: 12px;
+}
+.color-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px var(--s2);
 }
 .filters-mobile-btn {
   display: none;
@@ -1077,7 +1091,8 @@ ul {
 /* Product page ----------------------------------------------------------- */
 .pdp {
   display: grid;
-  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 620px) minmax(0, 440px);
+  justify-content: center;
   gap: var(--s7);
   padding-top: var(--s5);
 }
@@ -1110,6 +1125,84 @@ ul {
   padding: 0;
   display: block;
   width: 100%;
+}
+.zoom-hint {
+  position: absolute;
+  right: var(--s3);
+  bottom: var(--s3);
+  background: var(--bg);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  padding: 4px 10px;
+}
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: #f7f6f2;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  animation: fade var(--t-med) var(--ease);
+}
+.lightbox-stage {
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  cursor: zoom-in;
+  min-height: 0;
+  padding: var(--s4) 64px;
+}
+.lightbox-stage img {
+  max-height: calc(100vh - 80px);
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+  transition: transform var(--t-med) var(--ease);
+  user-select: none;
+}
+.lightbox-stage.zoomed {
+  cursor: zoom-out;
+}
+.lightbox-stage.zoomed img {
+  transform: scale(2.5);
+  transition: transform 0ms;
+}
+.lightbox-close {
+  position: absolute;
+  top: var(--s3);
+  right: var(--s3);
+  z-index: 2;
+  background: var(--bg);
+}
+.lightbox-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 48px;
+  height: 64px;
+  font-size: 36px;
+  z-index: 2;
+  background: rgba(247, 246, 242, 0.85);
+}
+.lightbox-nav.prev {
+  left: var(--s3);
+}
+.lightbox-nav.next {
+  right: var(--s3);
+}
+.lightbox-count {
+  text-align: center;
+  font-size: 13px;
+  padding: var(--s3);
+  color: var(--ink-2);
+}
+@media (max-width: 600px) {
+  .lightbox-stage {
+    padding: var(--s4) var(--s2);
+  }
+  .lightbox-nav {
+    width: 40px;
+  }
 }
 @media (max-width: 600px) {
   .gallery {
@@ -1478,6 +1571,7 @@ th {
 .banner img {
   width: 100%;
   aspect-ratio: 2 / 1;
+  max-height: 560px;
   object-fit: cover;
 }
 .banner-copy {

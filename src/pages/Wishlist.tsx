@@ -10,7 +10,7 @@ import { PurchasePanel } from '../components/PurchasePanel';
 import { usePageMeta } from '../components/usePageMeta';
 
 export default function Wishlist() {
-  usePageMeta('Wishlist', 'Pieces you saved for later.');
+  usePageMeta('위시리스트', '나중을 위해 저장한 상품.');
   const { wishlist, toggleWishlist, notify } = useStore();
   const [adding, setAdding] = useState<Product | null>(null);
   const products = wishlist.map(getProduct).filter((p): p is Product => !!p);
@@ -18,17 +18,17 @@ export default function Wishlist() {
   return (
     <div className="container" style={{ paddingBottom: 96 }}>
       <header className="catalog-head">
-        <h1 className="page-title">Wishlist</h1>
+        <h1 className="page-title">위시리스트</h1>
         <p className="muted">
-          {products.length} saved {products.length === 1 ? 'piece' : 'pieces'}. Saved in this browser.
+          저장한 상품 {products.length}개 · 이 브라우저에 저장됩니다.
         </p>
       </header>
       {products.length === 0 ? (
         <div className="empty">
-          <h2>Your wishlist is empty</h2>
-          <p className="muted">Tap the heart on any product to save it here for later.</p>
+          <h2>위시리스트가 비어 있습니다</h2>
+          <p className="muted">상품의 하트를 눌러 나중에 볼 상품을 저장하세요.</p>
           <Link to="/shop/all" className="btn btn-primary">
-            Browse the collection
+            컬렉션 둘러보기
           </Link>
         </div>
       ) : (
@@ -46,25 +46,25 @@ export default function Wishlist() {
               </div>
               <div style={{ display: 'grid', gap: 6 }}>
                 <button type="button" className="btn btn-primary btn-block" style={{ minHeight: 44 }} onClick={() => setAdding(p)}>
-                  Move to bag
+                  장바구니로 이동
                 </button>
                 <button
                   type="button"
                   className="btn-text"
                   onClick={() => {
                     toggleWishlist(p.id);
-                    notify(`${p.name} removed from your wishlist.`);
+                    notify(`${p.name}을(를) 위시리스트에서 삭제했습니다.`);
                   }}
-                  aria-label={`Remove ${p.name} from wishlist`}
+                  aria-label={`${p.name} 위시리스트에서 삭제`}
                 >
-                  Remove
+                  삭제
                 </button>
               </div>
             </li>
           ))}
         </ul>
       )}
-      <Dialog open={!!adding} onClose={() => setAdding(null)} title={adding ? `Move ${adding.name} to bag` : ''}>
+      <Dialog open={!!adding} onClose={() => setAdding(null)} title={adding ? `${adding.name} 장바구니 담기` : ''}>
         {adding && (
           <PurchasePanel
             product={adding}

@@ -6,20 +6,20 @@ import { useFocusTrap } from './useFocusTrap';
 
 const SLIDES = [
   {
-    eyebrow: 'Members & guests',
-    title: 'Free shipping over ₩100,000',
-    body: 'Plus free 14-day returns on every order.',
-    cta: { label: 'Shop new arrivals', to: '/shop/new-arrivals' },
+    eyebrow: '배송 혜택',
+    title: '₩100,000 이상 무료배송',
+    body: '모든 주문 14일 이내 무료 반품.',
+    cta: { label: '신상품 보러가기', to: '/shop/new-arrivals' },
     image: 'images/editorial/editorial-03.webp',
-    alt: 'Navy down puffer jacket and cream winter sneakers in a warm studio',
+    alt: '따뜻한 스튜디오의 네이비 다운 패딩과 크림 윈터 스니커즈',
   },
   {
-    eyebrow: 'Welcome offer',
-    title: '10% off with code TOOK10',
-    body: 'Up to ₩20,000 off your order. Apply it in your bag or at checkout.',
-    cta: { label: 'Shop outerwear', to: '/shop/outerwear' },
+    eyebrow: '웰컴 쿠폰',
+    title: 'TUK10 코드로 10% 할인',
+    body: '최대 ₩20,000 할인. 장바구니나 주문서에서 입력하세요.',
+    cta: { label: '아우터 보러가기', to: '/shop/outerwear' },
     image: 'images/editorial/hero-mobile-01.webp',
-    alt: 'Black wool overcoat, cream cable knit, and black boots in a studio',
+    alt: '스튜디오의 블랙 울 코트, 크림 케이블 니트, 블랙 부츠',
   },
 ];
 
@@ -69,17 +69,17 @@ export function PromoPopup() {
             {slide.cta.label}
           </Link>
         </div>
-        <div className="promo-dots" role="group" aria-label="Choose offer">
+        <div className="promo-dots" role="group" aria-label="혜택 선택">
           {SLIDES.map((s, i) => (
-            <button key={s.title} type="button" aria-pressed={i === index} aria-label={`Offer ${i + 1} of ${SLIDES.length}`} onClick={() => setIndex(i)} />
+            <button key={s.title} type="button" aria-pressed={i === index} aria-label={`혜택 ${i + 1} / ${SLIDES.length}`} onClick={() => setIndex(i)} />
           ))}
         </div>
         <button type="button" className="btn btn-primary btn-block" onClick={close} data-autofocus>
-          Close
+          닫기
         </button>
         <label className="checkbox promo-today">
           <input type="checkbox" checked={hideToday} onChange={(e) => setHideToday(e.target.checked)} />
-          Don’t show again today
+          오늘 하루 보지 않기
         </label>
       </div>
     </>
@@ -98,12 +98,12 @@ export function AnnouncementBar() {
   return (
     <div className="announcement">
       <span>
-        Free shipping over ₩100,000 · Use code TOOK10 for 10% off · <Link to="/shipping-returns">Free 14-day returns</Link>
+        ₩100,000 이상 무료배송 · 쿠폰 TUK10 10% 할인 · <Link to="/shipping-returns">14일 무료 반품</Link>
       </span>
       <button
         type="button"
         className="announcement-close"
-        aria-label="Dismiss announcement"
+        aria-label="공지 닫기"
         onClick={() => {
           setHidden(true);
           try {

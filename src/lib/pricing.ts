@@ -1,6 +1,6 @@
 import type { CartItem, CartTotals, Product } from '../domain/types';
 
-export const COUPON_CODE = 'TOOK10';
+export const COUPON_CODE = 'TUK10';
 export const COUPON_RATE = 0.1;
 export const COUPON_MAX = 20000;
 export const SHIPPING_FEE = 3000;

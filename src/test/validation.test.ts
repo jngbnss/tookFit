@@ -26,7 +26,7 @@ describe('checkout validation', () => {
     expect(validateCard({ number: '4242 4242 4242 4242', expiry: '12/29', cvc: '123', name: 'Min Park' }, now)).toEqual({});
     const e = validateCard({ number: '4242 4242 4242 4241', expiry: '01/20', cvc: '1', name: '' }, now);
     expect(Object.keys(e).sort()).toEqual(['cvc', 'expiry', 'name', 'number']);
-    expect(validateCard({ number: '4242424242424242', expiry: '13/29', cvc: '123', name: 'A B' }, now).expiry).toMatch(/Month/);
+    expect(validateCard({ number: '4242424242424242', expiry: '13/29', cvc: '123', name: 'A B' }, now).expiry).toMatch(/월은/);
   });
 
   it('simulates success and decline without network', async () => {
@@ -34,6 +34,6 @@ describe('checkout validation', () => {
     expect(ok).toMatchObject({ ok: true, last4: '4242' });
     const declined = await processPayment({ method: 'card', amount: 1000, cardNumber: '4000 0000 0000 0002' }, 0);
     expect(declined.ok).toBe(false);
-    expect(await processPayment({ method: 'kakaopay', amount: 1000 }, 0)).toMatchObject({ ok: true, label: 'Kakao Pay' });
+    expect(await processPayment({ method: 'kakaopay', amount: 1000 }, 0)).toMatchObject({ ok: true, label: '카카오페이' });
   });
 });

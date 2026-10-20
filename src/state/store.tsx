@@ -93,13 +93,13 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const addToCart = useCallback(
     (productId: string, colorId: string, size: string, quantity = 1): AddResult => {
       const product = getProduct(productId);
-      if (!product) return { ok: false, reason: 'This product is no longer available.' };
+      if (!product) return { ok: false, reason: '더 이상 판매하지 않는 상품입니다.' };
       const max = maxQuantity(product, colorId, size);
-      if (max <= 0) return { ok: false, reason: 'This size is sold out in the selected color.' };
+      if (max <= 0) return { ok: false, reason: '선택한 색상의 이 사이즈는 품절입니다.' };
       const key = cartKey(productId, colorId, size);
       const existing = cart.find((i) => i.key === key)?.quantity ?? 0;
       if (existing >= max) {
-        return { ok: false, reason: `You already have the maximum of ${max} in your bag for this option.` };
+        return { ok: false, reason: `이 옵션은 이미 최대 수량(${max}개)이 담겨 있습니다.` };
       }
       const next = Math.min(max, existing + quantity);
       setCart((items) =>

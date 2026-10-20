@@ -15,17 +15,17 @@ const item = (productId: string, quantity: number, colorId = 'black', size = 'M'
 
 describe('pricing', () => {
   it('calculates subtotal, shipping, and total for a cart', () => {
-    // Studio Long-Sleeve Tee ₩49,000 × 1 → below free-shipping threshold
+    // Studio long-sleeve tee ₩29,000 × 1 → below free-shipping threshold
     const totals = calculateTotals([item('tf-tp-02', 1)], getProduct, null);
-    expect(totals).toMatchObject({ subtotal: 49000, discount: 0, shipping: 3000, total: 52000, itemCount: 1, freeShippingRemaining: 51000 });
+    expect(totals).toMatchObject({ subtotal: 29000, discount: 0, shipping: 3000, total: 32000, itemCount: 1, freeShippingRemaining: 71000 });
   });
 
-  it('applies the TOOK10 coupon at 10% and caps it at ₩20,000', () => {
-    expect(couponDiscount(150000, 'TOOK10')).toBe(15000);
-    expect(couponDiscount(150000, 'took10')).toBe(15000);
-    expect(couponDiscount(389000, 'TOOK10')).toBe(20000);
+  it('applies the TUK10 coupon at 10% and caps it at ₩20,000', () => {
+    expect(couponDiscount(150000, 'TUK10')).toBe(15000);
+    expect(couponDiscount(150000, 'tuk10')).toBe(15000);
+    expect(couponDiscount(389000, 'TUK10')).toBe(20000);
     expect(couponDiscount(150000, 'NOPE')).toBe(0);
-    const totals = calculateTotals([item('tf-ow-01', 1)], getProduct, 'TOOK10');
+    const totals = calculateTotals([item('tf-ow-01', 1)], getProduct, 'TUK10');
     expect(totals).toMatchObject({ subtotal: 389000, discount: 20000, shipping: 0, total: 369000 });
   });
 
@@ -33,10 +33,10 @@ describe('pricing', () => {
     expect(shippingFee(0)).toBe(0);
     expect(shippingFee(99999)).toBe(3000);
     expect(shippingFee(100000)).toBe(0);
-    // ₩49,000 × 2 = ₩98,000 → still pays shipping; × 3 = ₩147,000 → free even after coupon
-    expect(calculateTotals([item('tf-tp-02', 2)], getProduct, null).shipping).toBe(3000);
-    const t = calculateTotals([item('tf-tp-02', 3)], getProduct, 'TOOK10');
-    expect(t).toMatchObject({ subtotal: 147000, discount: 14700, shipping: 0, total: 132300 });
+    // ₩89,000 × 1 still pays shipping; × 2 = ₩178,000 → free even after coupon
+    expect(calculateTotals([item('tf-tp-01', 1)], getProduct, null).shipping).toBe(3000);
+    const t = calculateTotals([item('tf-tp-01', 2)], getProduct, 'TUK10');
+    expect(t).toMatchObject({ subtotal: 178000, discount: 17800, shipping: 0, total: 160200 });
   });
 
   it('computes discount percentages', () => {

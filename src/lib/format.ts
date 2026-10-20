@@ -6,7 +6,7 @@ export function formatKRW(value: number): string {
 }
 
 export function formatDate(iso: string): string {
-  return new Date(iso).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+  return new Date(iso).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' });
 }
 
 export function asset(path: string): string {

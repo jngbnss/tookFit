@@ -11,24 +11,24 @@ describe('promo popup and announcement', () => {
   it('shows on first visit and closes without remembering by default', async () => {
     const user = userEvent.setup();
     renderApp('/');
-    const dialog = await screen.findByRole('dialog', { name: /Free shipping over ₩100,000/ });
-    await user.click(within(dialog).getByRole('button', { name: 'Offer 2 of 2' }));
-    expect(within(dialog).getByRole('heading', { name: /TOOK10/ })).toBeInTheDocument();
-    await user.click(within(dialog).getByRole('button', { name: 'Close' }));
+    const dialog = await screen.findByRole('dialog', { name: /₩100,000 이상 무료배송/ });
+    await user.click(within(dialog).getByRole('button', { name: '혜택 2 / 2' }));
+    expect(within(dialog).getByRole('heading', { name: /TUK10/ })).toBeInTheDocument();
+    await user.click(within(dialog).getByRole('button', { name: '닫기' }));
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
     expect(isPromoHidden()).toBe(false);
   });
 
-  it('stays hidden for the day when "Don’t show again today" is checked', async () => {
+  it('stays hidden for the day when "오늘 하루 보지 않기" is checked', async () => {
     const user = userEvent.setup();
     const first = renderApp('/');
     const dialog = await screen.findByRole('dialog');
-    await user.click(within(dialog).getByRole('checkbox', { name: /Don’t show again today/ }));
-    await user.click(within(dialog).getByRole('button', { name: 'Close' }));
+    await user.click(within(dialog).getByRole('checkbox', { name: /오늘 하루 보지 않기/ }));
+    await user.click(within(dialog).getByRole('button', { name: '닫기' }));
     expect(isPromoHidden()).toBe(true);
     first.unmount();
     renderApp('/');
-    await screen.findByRole('heading', { level: 1, name: /Built for the cold/ });
+    await screen.findByRole('heading', { level: 1, name: /추위를 위해/ });
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
@@ -41,7 +41,7 @@ describe('promo popup and announcement', () => {
     await screen.findByRole('dialog');
     await user.keyboard('{Escape}');
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
-    await user.click(screen.getByRole('button', { name: 'Dismiss announcement' }));
-    expect(screen.queryByText(/Use code TOOK10 for 10% off/)).not.toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: '공지 닫기' }));
+    expect(screen.queryByText(/쿠폰 TUK10 10% 할인/)).not.toBeInTheDocument();
   });
 });

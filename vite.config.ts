@@ -3,7 +3,7 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
 export default defineConfig(({ command }) => ({
-  base: command === 'build' ? '/tookFit/' : '/',
+  base: command === 'build' ? '/tukFit/' : '/',
   plugins: [react()],
   test: {
     environment: 'jsdom',

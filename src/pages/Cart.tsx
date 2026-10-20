@@ -9,7 +9,7 @@ import { usePageMeta } from '../components/usePageMeta';
 import { getProduct } from '../lib/catalog';
 
 export default function Cart() {
-  usePageMeta('Your bag');
+  usePageMeta('장바구니');
   const { cart, totals, coupon, clearCart, notify } = useStore();
   const [confirmClear, setConfirmClear] = useState(false);
   const navigate = useNavigate();
@@ -26,25 +26,25 @@ export default function Cart() {
   return (
     <div className="container" style={{ paddingBottom: 64 }}>
       <header className="catalog-head">
-        <h1 className="page-title">Your bag</h1>
+        <h1 className="page-title">장바구니</h1>
       </header>
       {cart.length === 0 ? (
         <>
           <div className="empty">
-            <h2>Your bag is empty</h2>
-            <p className="muted">Start with the season’s essentials — or check your wishlist for pieces you saved.</p>
+            <h2>장바구니가 비어 있습니다</h2>
+            <p className="muted">시즌 필수 아이템으로 시작하거나 위시리스트를 확인해 보세요.</p>
             <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', justifyContent: 'center' }}>
               <Link to="/shop/all" className="btn btn-primary">
-                Continue shopping
+                쇼핑 계속하기
               </Link>
               <Link to="/wishlist" className="btn btn-secondary">
-                View wishlist
+                위시리스트 보기
               </Link>
             </div>
           </div>
           <section aria-labelledby="pop-title">
             <div className="section-head">
-              <h2 id="pop-title">Popular right now</h2>
+              <h2 id="pop-title">지금 인기 있는 상품</h2>
             </div>
             <ProductGrid products={fallbackRecs} />
           </section>
@@ -59,23 +59,23 @@ export default function Cart() {
             </ul>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 16, gap: 12, flexWrap: 'wrap' }}>
               <Link to="/shop/all" className="btn-text">
-                ← Continue shopping
+                ← 쇼핑 계속하기
               </Link>
               <button type="button" className="btn-text" onClick={() => setConfirmClear(true)}>
-                Clear bag
+                전체 삭제
               </button>
             </div>
           </div>
-          <aside className="summary" aria-label="Order summary">
-            <h2 style={{ fontSize: 14, letterSpacing: '0.14em', textTransform: 'uppercase' }}>Order summary</h2>
+          <aside className="summary" aria-label="주문 요약">
+            <h2 style={{ fontSize: 14, letterSpacing: '0.14em', textTransform: 'uppercase' }}>주문 요약</h2>
             <FreeShippingProgress subtotal={totals.subtotal} />
             <CouponForm />
             <SummaryRows totals={totals} coupon={coupon} />
             <button type="button" className="btn btn-primary btn-block" onClick={() => navigate('/checkout')}>
-              Proceed to checkout
+              주문하기
             </button>
             <p className="muted" style={{ fontSize: 12 }}>
-              Demo store — no real payment will be taken.
+              데모 스토어 — 실제 결제는 이루어지지 않습니다.
             </p>
           </aside>
         </div>
@@ -83,13 +83,13 @@ export default function Cart() {
       {cart.length > 0 && recommendations.length > 0 && (
         <section className="section" aria-labelledby="rec-title">
           <div className="section-head">
-            <h2 id="rec-title">Complete the look</h2>
+            <h2 id="rec-title">함께 코디하기 좋은 상품</h2>
           </div>
           <ProductGrid products={recommendations as typeof PRODUCTS} />
         </section>
       )}
-      <Dialog open={confirmClear} onClose={() => setConfirmClear(false)} title="Clear your bag?">
-        <p style={{ marginBottom: 24 }}>This removes all {totals.itemCount} items from your bag. This can’t be undone.</p>
+      <Dialog open={confirmClear} onClose={() => setConfirmClear(false)} title="장바구니를 비울까요?">
+        <p style={{ marginBottom: 24 }}>장바구니의 상품 {totals.itemCount}개가 모두 삭제됩니다. 되돌릴 수 없습니다.</p>
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
           <button
             type="button"
@@ -97,13 +97,13 @@ export default function Cart() {
             onClick={() => {
               clearCart();
               setConfirmClear(false);
-              notify('Your bag has been cleared.');
+              notify('장바구니를 비웠습니다.');
             }}
           >
-            Clear bag
+            모두 삭제
           </button>
           <button type="button" className="btn btn-secondary" data-autofocus onClick={() => setConfirmClear(false)}>
-            Keep items
+            유지하기
           </button>
         </div>
       </Dialog>

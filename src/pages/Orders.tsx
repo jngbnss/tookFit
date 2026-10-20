@@ -12,19 +12,19 @@ function OrderBody({ order }: { order: Order }) {
     <div className="two-col">
       <div>
         <h2 className="checkout-section" style={{ fontSize: 14, letterSpacing: '0.14em', textTransform: 'uppercase', paddingBottom: 12 }}>
-          Items
+          주문 상품
         </h2>
         <ul>
           {order.lines.map((l, i) => (
             <li key={i} className="line">
-              <SmartImage src={l.image} alt={`${l.name} in ${l.colorName}`} />
+              <SmartImage src={l.image} alt={`${l.colorName} ${l.name}`} />
               <div className="line-info">
                 <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12 }}>
                   <span>{l.name}</span>
                   <span>{formatKRW(l.unitPrice * l.quantity)}</span>
                 </div>
                 <p className="line-meta">
-                  {l.colorName} · Size {l.size} · Qty {l.quantity} · {formatKRW(l.unitPrice)} each
+                  {l.colorName} · 사이즈 {l.size} · 수량 {l.quantity} · 개당 {formatKRW(l.unitPrice)}
                 </p>
               </div>
             </li>
@@ -32,7 +32,7 @@ function OrderBody({ order }: { order: Order }) {
         </ul>
         <div className="form-grid" style={{ marginTop: 24 }}>
           <div className="stack" style={{ gap: 4 }}>
-            <h3 className="eyebrow">Shipping to</h3>
+            <h3 className="eyebrow">배송지</h3>
             <p>{s.fullName}</p>
             <p>
               {s.address}, {s.city} {s.postalCode}
@@ -40,35 +40,35 @@ function OrderBody({ order }: { order: Order }) {
             <p className="muted">
               {s.email} · {s.phone}
             </p>
-            {s.note && <p className="muted">Note: {s.note}</p>}
+            {s.note && <p className="muted">배송 메모: {s.note}</p>}
           </div>
           <div className="stack" style={{ gap: 4 }}>
-            <h3 className="eyebrow">Payment</h3>
+            <h3 className="eyebrow">결제 수단</h3>
             <p>
               {order.payment.label}
-              {order.payment.last4 ? ` ending in ${order.payment.last4}` : ''}
+              {order.payment.last4 ? ` (끝자리 ${order.payment.last4})` : ''}
             </p>
             <p className="muted" style={{ fontSize: 13 }}>
-              Simulated payment — no charge was made.
+              시뮬레이션 결제 — 실제 청구되지 않았습니다.
             </p>
           </div>
         </div>
       </div>
-      <aside className="summary" aria-label="Order totals">
+      <aside className="summary" aria-label="결제 금액">
         <div className="summary-row">
-          <span>Subtotal</span>
+          <span>상품 금액</span>
           <span>{formatKRW(order.totals.subtotal)}</span>
         </div>
         <div className="summary-row">
-          <span>Discount{order.coupon ? ` (${order.coupon})` : ''}</span>
+          <span>할인{order.coupon ? ` (${order.coupon})` : ''}</span>
           <span>{order.totals.discount ? `−${formatKRW(order.totals.discount)}` : formatKRW(0)}</span>
         </div>
         <div className="summary-row">
-          <span>Shipping</span>
-          <span>{order.totals.shipping === 0 ? 'Free' : formatKRW(order.totals.shipping)}</span>
+          <span>배송비</span>
+          <span>{order.totals.shipping === 0 ? '무료' : formatKRW(order.totals.shipping)}</span>
         </div>
         <div className="summary-row summary-total">
-          <span>Total paid</span>
+          <span>총 결제 금액</span>
           <span>{formatKRW(order.totals.total)}</span>
         </div>
       </aside>
@@ -80,25 +80,25 @@ export function OrderConfirmation() {
   const { id = '' } = useParams();
   const { orders } = useStore();
   const order = orders.find((o) => o.id === id);
-  usePageMeta('Order confirmed');
+  usePageMeta('주문 완료');
   if (!order) return <NotFound />;
   return (
     <div className="container" style={{ paddingBottom: 96 }}>
       <header className="catalog-head">
-        <p className="eyebrow">Thank you</p>
-        <h1 className="page-title">Your order is confirmed.</h1>
+        <p className="eyebrow">감사합니다</p>
+        <h1 className="page-title">주문이 완료되었습니다.</h1>
         <p className="muted" style={{ marginTop: 8 }}>
-          Order number <strong style={{ color: 'var(--ink)' }}>{order.id}</strong> · placed {formatDate(order.createdAt)}
+          주문번호 <strong style={{ color: 'var(--ink)' }}>{order.id}</strong> · {formatDate(order.createdAt)} 주문
         </p>
         <p className="notice" style={{ marginTop: 16, maxWidth: 640 }}>
-          This is a demo order. Nothing will ship and no confirmation email is sent. Only non-sensitive order details are saved in this browser.
+          데모 주문입니다. 실제 배송이나 확인 메일은 없으며, 민감하지 않은 주문 정보만 이 브라우저에 저장됩니다.
         </p>
         <div style={{ display: 'flex', gap: 8, marginTop: 24, flexWrap: 'wrap' }}>
           <Link to="/shop/all" className="btn btn-primary">
-            Continue shopping
+            쇼핑 계속하기
           </Link>
           <Link to="/account/orders" className="btn btn-secondary">
-            View orders
+            주문 내역 보기
           </Link>
         </div>
       </header>
@@ -109,26 +109,26 @@ export function OrderConfirmation() {
 
 export function OrderHistory() {
   const { orders } = useStore();
-  usePageMeta('Order history');
+  usePageMeta('주문 내역');
   return (
     <div className="container" style={{ paddingBottom: 96 }}>
-      <nav className="breadcrumbs" aria-label="Breadcrumb">
+      <nav className="breadcrumbs" aria-label="현재 위치">
         <ol>
           <li>
-            <Link to="/account">Account</Link>
+            <Link to="/account">마이페이지</Link>
           </li>
-          <li aria-current="page">Orders</li>
+          <li aria-current="page">주문 내역</li>
         </ol>
       </nav>
       <header className="catalog-head">
-        <h1 className="page-title">Order history</h1>
+        <h1 className="page-title">주문 내역</h1>
       </header>
       {orders.length === 0 ? (
         <div className="empty">
-          <h2>No orders yet</h2>
-          <p className="muted">When you complete a demo checkout, your orders will appear here.</p>
+          <h2>아직 주문 내역이 없습니다</h2>
+          <p className="muted">데모 결제를 완료하면 이곳에 주문이 표시됩니다.</p>
           <Link to="/shop/all" className="btn btn-primary">
-            Start shopping
+            쇼핑 시작하기
           </Link>
         </div>
       ) : (
@@ -142,7 +142,7 @@ export function OrderHistory() {
                   </Link>
                 </p>
                 <p className="muted">
-                  {formatDate(o.createdAt)} · {o.lines.reduce((n, l) => n + l.quantity, 0)} items · {o.payment.label}
+                  {formatDate(o.createdAt)} · {o.lines.reduce((n, l) => n + l.quantity, 0)}개 · {o.payment.label}
                 </p>
                 <div className="thumb-row">
                   {o.lines.slice(0, 5).map((l, i) => (
@@ -166,25 +166,25 @@ export function OrderDetail() {
   const { id = '' } = useParams();
   const { orders } = useStore();
   const order = orders.find((o) => o.id === id);
-  usePageMeta(order ? `Order ${order.id}` : 'Order not found');
+  usePageMeta(order ? `주문 ${order.id}` : '주문을 찾을 수 없습니다');
   if (!order) return <NotFound />;
   return (
     <div className="container" style={{ paddingBottom: 96 }}>
-      <nav className="breadcrumbs" aria-label="Breadcrumb">
+      <nav className="breadcrumbs" aria-label="현재 위치">
         <ol>
           <li>
-            <Link to="/account">Account</Link>
+            <Link to="/account">마이페이지</Link>
           </li>
           <li>
-            <Link to="/account/orders">Orders</Link>
+            <Link to="/account/orders">주문 내역</Link>
           </li>
           <li aria-current="page">{order.id}</li>
         </ol>
       </nav>
       <header className="catalog-head">
-        <h1 className="page-title">Order {order.id}</h1>
+        <h1 className="page-title">주문 {order.id}</h1>
         <p className="muted" style={{ marginTop: 8 }}>
-          Placed {formatDate(order.createdAt)} · <span className="status-pill">{order.status}</span>
+          {formatDate(order.createdAt)} 주문 · <span className="status-pill">{order.status}</span>
         </p>
       </header>
       <OrderBody order={order} />

@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
 import type { CartItem, CartTotals } from '../domain/types';
-import { getProduct } from '../lib/catalog';
+import { getProduct, primaryImage } from '../lib/catalog';
 import { formatKRW } from '../lib/format';
 import { COUPON_CODE, FREE_SHIPPING_THRESHOLD, maxQuantity } from '../lib/pricing';
 import { useStore } from '../state/store';
@@ -13,12 +13,12 @@ export function CartLine({ item, compact = false, onNavigate }: { item: CartItem
   if (!product) return null;
   const color = product.colors.find((c) => c.id === item.colorId);
   const max = maxQuantity(product, item.colorId, item.size);
-  const imgIndex = product.colors.findIndex((c) => c.id === item.colorId) === 1 ? 1 : 0;
-  const label = `${product.name}, ${color?.name}, size ${item.size}`;
+  const img = primaryImage(product, item.colorId);
+  const label = `${product.name}, ${color?.name}, 사이즈 ${item.size}`;
   return (
     <li className="line">
       <Link to={`/product/${product.slug}`} onClick={onNavigate} aria-hidden="true" tabIndex={-1}>
-        <SmartImage src={product.images[imgIndex].src} alt={product.images[imgIndex].alt} />
+        <SmartImage src={img.src} alt={img.alt} />
       </Link>
       <div className="line-info">
         <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12 }}>
@@ -28,16 +28,16 @@ export function CartLine({ item, compact = false, onNavigate }: { item: CartItem
           <span>{formatKRW(product.price * item.quantity)}</span>
         </div>
         <p className="line-meta">
-          {color?.name} · Size {item.size}
-          {!compact && <> · {formatKRW(product.price)} each</>}
+          {color?.name} · 사이즈 {item.size}
+          {!compact && <> · 개당 {formatKRW(product.price)}</>}
         </p>
         <div className="line-actions">
-          <div className="qty qty-sm" role="group" aria-label={`Quantity for ${label}`}>
-            <button type="button" aria-label={`Decrease quantity of ${label}`} disabled={item.quantity <= 1} onClick={() => setQuantity(item.key, item.quantity - 1)}>
+          <div className="qty qty-sm" role="group" aria-label={`${label} 수량`}>
+            <button type="button" aria-label={`${label} 수량 줄이기`} disabled={item.quantity <= 1} onClick={() => setQuantity(item.key, item.quantity - 1)}>
               −
             </button>
             <span aria-live="polite">{item.quantity}</span>
-            <button type="button" aria-label={`Increase quantity of ${label}`} disabled={item.quantity >= max} onClick={() => setQuantity(item.key, item.quantity + 1)}>
+            <button type="button" aria-label={`${label} 수량 늘리기`} disabled={item.quantity >= max} onClick={() => setQuantity(item.key, item.quantity + 1)}>
               +
             </button>
           </div>
@@ -46,14 +46,14 @@ export function CartLine({ item, compact = false, onNavigate }: { item: CartItem
             className="btn-text"
             onClick={() => {
               removeFromCart(item.key);
-              notify(`${product.name} removed from your bag.`);
+              notify(`${product.name}을(를) 장바구니에서 삭제했습니다.`);
             }}
-            aria-label={`Remove ${label}`}
+            aria-label={`${label} 삭제`}
           >
-            Remove
+            삭제
           </button>
         </div>
-        {item.quantity >= max && <p className="line-meta">Maximum available quantity reached.</p>}
+        {item.quantity >= max && <p className="line-meta">구매 가능한 최대 수량입니다.</p>}
       </div>
     </li>
   );
@@ -64,8 +64,8 @@ export function FreeShippingProgress({ subtotal }: { subtotal: number }) {
   const pct = Math.min(100, (subtotal / FREE_SHIPPING_THRESHOLD) * 100);
   return (
     <div className="ship-progress">
-      <p>{remaining > 0 ? <>Add {formatKRW(remaining)} more for free shipping.</> : <>You’ve unlocked free standard shipping.</>}</p>
-      <div className="bar" role="progressbar" aria-label="Progress to free shipping" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(pct)}>
+      <p>{remaining > 0 ? <>{formatKRW(remaining)} 더 담으면 무료배송!</> : <>무료배송 혜택이 적용되었습니다.</>}</p>
+      <div className="bar" role="progressbar" aria-label="무료배송까지 진행률" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(pct)}>
         <span style={{ width: `${pct}%` }} />
       </div>
     </div>
@@ -80,11 +80,11 @@ export function CouponForm() {
   function submit(e: FormEvent) {
     e.preventDefault();
     if (!code.trim()) {
-      setMessage({ ok: false, text: 'Enter a coupon code.' });
+      setMessage({ ok: false, text: '쿠폰 코드를 입력해 주세요.' });
       return;
     }
     const ok = applyCoupon(code);
-    setMessage(ok ? { ok: true, text: 'Coupon applied: 10% off, up to ₩20,000.' } : { ok: false, text: `“${code}” isn’t a valid code. Try ${COUPON_CODE}.` });
+    setMessage(ok ? { ok: true, text: '쿠폰 적용 완료: 10% 할인 (최대 ₩20,000)' } : { ok: false, text: `“${code}”은(는) 유효하지 않은 코드입니다. ${COUPON_CODE}를 사용해 보세요.` });
     if (ok) setCode('');
   }
 
@@ -92,7 +92,7 @@ export function CouponForm() {
     return (
       <div className="summary-row" style={{ alignItems: 'center' }}>
         <span>
-          Coupon <strong>{coupon}</strong> applied
+          쿠폰 <strong>{coupon}</strong> 적용됨
         </span>
         <button
           type="button"
@@ -102,7 +102,7 @@ export function CouponForm() {
             setMessage(null);
           }}
         >
-          Remove
+          삭제
         </button>
       </div>
     );
@@ -110,12 +110,12 @@ export function CouponForm() {
   return (
     <form onSubmit={submit} noValidate>
       <label htmlFor="coupon" className="sr-only">
-        Coupon code
+        쿠폰 코드
       </label>
       <div className="coupon-form">
-        <input id="coupon" className="input" placeholder="Coupon code" value={code} onChange={(e) => setCode(e.target.value)} aria-describedby={message ? 'coupon-msg' : undefined} aria-invalid={message ? !message.ok : undefined} />
+        <input id="coupon" className="input" placeholder="쿠폰 코드" value={code} onChange={(e) => setCode(e.target.value)} aria-describedby={message ? 'coupon-msg' : undefined} aria-invalid={message ? !message.ok : undefined} />
         <button type="submit" className="btn btn-secondary">
-          Apply
+          적용
         </button>
       </div>
       {message && (
@@ -131,25 +131,25 @@ export function SummaryRows({ totals, coupon }: { totals: CartTotals; coupon: st
   return (
     <>
       <div className="summary-row">
-        <span>Subtotal ({totals.itemCount} {totals.itemCount === 1 ? 'item' : 'items'})</span>
+        <span>상품 금액 ({totals.itemCount}개)</span>
         <span>{formatKRW(totals.subtotal)}</span>
       </div>
       {totals.discount > 0 && (
         <div className="summary-row">
-          <span>Discount{coupon ? ` (${coupon})` : ''}</span>
+          <span>할인{coupon ? ` (${coupon})` : ''}</span>
           <span>−{formatKRW(totals.discount)}</span>
         </div>
       )}
       <div className="summary-row">
-        <span>Shipping</span>
-        <span>{totals.shipping === 0 ? 'Free' : formatKRW(totals.shipping)}</span>
+        <span>배송비</span>
+        <span>{totals.shipping === 0 ? '무료' : formatKRW(totals.shipping)}</span>
       </div>
       <div className="summary-row summary-total">
-        <span>Total</span>
+        <span>총 결제 금액</span>
         <span>{formatKRW(totals.total)}</span>
       </div>
       <p className="muted" style={{ fontSize: 12 }}>
-        All prices include VAT.
+        모든 가격은 부가세 포함입니다.
       </p>
     </>
   );

@@ -20,7 +20,7 @@ export function SmartImage({ src, alt, eager = false, className = '', imgClassNa
         key={src}
         className={imgClassName}
         src={asset(failed ? FALLBACK_IMAGE : src)}
-        alt={failed ? `${alt} (image unavailable)` : alt}
+        alt={failed ? `${alt} (이미지를 불러올 수 없음)` : alt}
         width={1024}
         height={1280}
         loading={eager ? 'eager' : 'lazy'}

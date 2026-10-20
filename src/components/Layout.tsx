@@ -34,38 +34,38 @@ function SearchPanel({ onClose }: { onClose: () => void }) {
   return (
     <>
       <div className="overlay" onClick={onClose} aria-hidden="true" />
-      <div ref={ref} className="search-panel" role="dialog" aria-modal="true" aria-label="Search products">
+      <div ref={ref} className="search-panel" role="dialog" aria-modal="true" aria-label="상품 검색">
         <div className="container">
           <form className="search-form" role="search" onSubmit={submit}>
             <label htmlFor={`${id}-q`} className="sr-only">
-              Search products
+              상품 검색
             </label>
             <input
               id={`${id}-q`}
               data-autofocus
               className="input"
               type="search"
-              placeholder="Search coats, knitwear, denim…"
+              placeholder="코트, 니트, 데님 검색…"
               value={q}
               onChange={(e) => setQ(e.target.value)}
               autoComplete="off"
               aria-describedby={`${id}-hint`}
             />
             <button type="submit" className="btn btn-primary">
-              Search
+              검색
             </button>
-            <button type="button" className="icon-btn" onClick={onClose} aria-label="Close search">
+            <button type="button" className="icon-btn" onClick={onClose} aria-label="검색 닫기">
               <CloseIcon />
             </button>
           </form>
           <p id={`${id}-hint`} className="sr-only">
-            Suggestions appear as you type.
+            입력하면 추천 상품이 표시됩니다.
           </p>
           <div className="search-results">
             {suggestions.length > 0 && (
               <div>
                 <p className="eyebrow" style={{ marginBottom: 8 }}>
-                  Suggestions
+                  추천 상품
                 </p>
                 <ul aria-live="polite">
                   {suggestions.map((p) => (
@@ -90,11 +90,11 @@ function SearchPanel({ onClose }: { onClose: () => void }) {
                 </ul>
               </div>
             )}
-            {q.trim().length >= 2 && suggestions.length === 0 && <p className="muted">No matching products. Try “wool”, “knit”, or “boots”.</p>}
+            {q.trim().length >= 2 && suggestions.length === 0 && <p className="muted">일치하는 상품이 없습니다. “울”, “니트”, “부츠”로 검색해 보세요.</p>}
             {searches.length > 0 && (
               <div>
                 <p className="eyebrow" style={{ marginBottom: 8 }}>
-                  Recent searches
+                  최근 검색어
                 </p>
                 <ul style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
                   {searches.map((s) => (
@@ -106,16 +106,16 @@ function SearchPanel({ onClose }: { onClose: () => void }) {
                   ))}
                 </ul>
                 <button type="button" className="btn-text" onClick={clearSearches}>
-                  Clear recent searches
+                  최근 검색어 삭제
                 </button>
               </div>
             )}
             <div>
               <p className="eyebrow" style={{ marginBottom: 8 }}>
-                Popular
+                인기 검색어
               </p>
               <ul style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-                {['Overcoat', 'Cable knit', 'Wide trousers', 'Boots'].map((s) => (
+                {['코트', '케이블 니트', '와이드', '부츠'].map((s) => (
                   <li key={s}>
                     <button type="button" className="chip" onClick={() => go(s)}>
                       {s}
@@ -139,13 +139,13 @@ function CartDrawer() {
     <Drawer
       open={cartOpen}
       onClose={close}
-      title={`Your bag (${totals.itemCount})`}
+      title={`장바구니 (${totals.itemCount})`}
       footer={
         cart.length > 0 ? (
           <>
             <FreeShippingProgress subtotal={totals.subtotal} />
             <div className="summary-row summary-total" style={{ borderTop: 0, paddingTop: 0 }}>
-              <span>Subtotal</span>
+              <span>상품 금액</span>
               <span>{formatKRW(totals.subtotal)}</span>
             </div>
             <button
@@ -156,7 +156,7 @@ function CartDrawer() {
                 navigate('/checkout');
               }}
             >
-              Checkout
+              주문하기
             </button>
             <button
               type="button"
@@ -166,7 +166,7 @@ function CartDrawer() {
                 navigate('/cart');
               }}
             >
-              View bag
+              장바구니 보기
             </button>
           </>
         ) : undefined
@@ -174,7 +174,7 @@ function CartDrawer() {
     >
       {cart.length === 0 ? (
         <div className="empty" style={{ padding: '48px 0' }}>
-          <p>Your bag is empty.</p>
+          <p>장바구니가 비어 있습니다.</p>
           <button
             type="button"
             className="btn btn-primary"
@@ -183,7 +183,7 @@ function CartDrawer() {
               navigate('/shop/new-arrivals');
             }}
           >
-            Shop new arrivals
+            신상품 보러가기
           </button>
         </div>
       ) : (
@@ -200,8 +200,8 @@ function CartDrawer() {
 function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
   const { user } = useStore();
   return (
-    <Drawer open={open} onClose={onClose} title="Menu" side="left">
-      <nav className="mobile-nav" aria-label="Mobile">
+    <Drawer open={open} onClose={onClose} title="메뉴" side="left">
+      <nav className="mobile-nav" aria-label="모바일 메뉴">
         <ul>
           {COLLECTIONS.map((c) => (
             <li key={c.slug}>
@@ -213,27 +213,27 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
           ))}
           <li>
             <Link to="/wishlist" onClick={onClose}>
-              Wishlist
+              위시리스트
             </Link>
           </li>
           <li>
             <Link to={user ? '/account' : '/account/sign-in'} onClick={onClose}>
-              {user ? 'My account' : 'Sign in'}
+              {user ? '마이페이지' : '로그인'}
             </Link>
           </li>
           <li>
             <Link to="/account/orders" onClick={onClose}>
-              Orders
+              주문 내역
             </Link>
           </li>
           <li>
             <Link to="/about" onClick={onClose}>
-              About T.O.O.K FIT
+              TUK FIT 소개
             </Link>
           </li>
           <li>
             <Link to="/contact" onClick={onClose}>
-              Contact
+              고객센터
             </Link>
           </li>
         </ul>
@@ -251,31 +251,31 @@ function Header() {
     <header className="header">
       <div className="container header-inner">
         <div className="header-left">
-          <button type="button" className="icon-btn menu-btn" aria-label="Open menu" aria-expanded={menuOpen} onClick={() => setMenuOpen(true)}>
+          <button type="button" className="icon-btn menu-btn" aria-label="메뉴 열기" aria-expanded={menuOpen} onClick={() => setMenuOpen(true)}>
             <MenuIcon />
           </button>
-          <button type="button" className="icon-btn" aria-label="Open search" aria-expanded={searchOpen} onClick={() => setSearchOpen(true)}>
+          <button type="button" className="icon-btn" aria-label="검색 열기" aria-expanded={searchOpen} onClick={() => setSearchOpen(true)}>
             <SearchIcon />
           </button>
         </div>
-        <Link to="/" className="wordmark" aria-label="T.O.O.K FIT home">
-          T.O.O.K FIT
+        <Link to="/" className="wordmark" aria-label="TUK FIT 홈">
+          TUK FIT
         </Link>
         <div className="header-right">
-          <Link to={user ? '/account' : '/account/sign-in'} className="icon-btn hide-mobile" aria-label={user ? `Account for ${user.name}` : 'Sign in'}>
+          <Link to={user ? '/account' : '/account/sign-in'} className="icon-btn hide-mobile" aria-label={user ? `${user.name}님의 마이페이지` : '로그인'}>
             <UserIcon />
           </Link>
-          <Link to="/wishlist" className="icon-btn" aria-label={`Wishlist, ${wishlist.length} ${wishlist.length === 1 ? 'item' : 'items'}`}>
+          <Link to="/wishlist" className="icon-btn" aria-label={`위시리스트, ${wishlist.length}개`}>
             <HeartIcon />
             {wishlist.length > 0 && <span className="count-badge" aria-hidden="true">{wishlist.length}</span>}
           </Link>
-          <button type="button" className="icon-btn" aria-label={`Open bag, ${totals.itemCount} ${totals.itemCount === 1 ? 'item' : 'items'}`} onClick={() => setCartOpen(true)}>
+          <button type="button" className="icon-btn" aria-label={`장바구니 열기, ${totals.itemCount}개`} onClick={() => setCartOpen(true)}>
             <BagIcon />
             {totals.itemCount > 0 && <span className="count-badge" aria-hidden="true">{totals.itemCount}</span>}
           </button>
         </div>
       </div>
-      <nav className="nav" aria-label="Primary">
+      <nav className="nav" aria-label="주 메뉴">
         <ul className="container">
           {COLLECTIONS.map((c) => (
             <li key={c.slug}>
@@ -300,17 +300,17 @@ function Footer() {
         <div className="footer-grid">
           <div className="stack" style={{ gap: 12 }}>
             <span className="wordmark" style={{ fontSize: 22 }}>
-              T.O.O.K FIT
+              TUK FIT
             </span>
             <p className="muted" style={{ maxWidth: 320 }}>
-              Quiet menswear for cold cities. Designed in Seoul, made in small runs.
+              추운 도시를 위한 조용한 남성복. 서울에서 디자인하고 소량 생산합니다.
             </p>
             <p className="muted" style={{ fontSize: 12, maxWidth: 340 }}>
-              This is a frontend demonstration store. No real orders, payments, or accounts are processed.
+              프론트엔드 데모 스토어입니다. 실제 주문, 결제, 계정은 처리되지 않습니다.
             </p>
           </div>
           <div>
-            <h3>Shop</h3>
+            <h3>쇼핑</h3>
             <ul>
               {CATEGORIES.slice(0, 6).map((c) => (
                 <li key={c.slug}>
@@ -318,59 +318,59 @@ function Footer() {
                 </li>
               ))}
               <li>
-                <Link to="/shop/sale">Sale</Link>
+                <Link to="/shop/sale">세일</Link>
               </li>
             </ul>
           </div>
           <div>
-            <h3>Help</h3>
+            <h3>고객 지원</h3>
             <ul>
               <li>
-                <Link to="/shipping-returns">Shipping &amp; Returns</Link>
+                <Link to="/shipping-returns">배송 및 반품</Link>
               </li>
               <li>
-                <Link to="/size-guide">Size Guide</Link>
+                <Link to="/size-guide">사이즈 가이드</Link>
               </li>
               <li>
-                <Link to="/faq">FAQ</Link>
+                <Link to="/faq">자주 묻는 질문</Link>
               </li>
               <li>
-                <Link to="/contact">Contact</Link>
+                <Link to="/contact">고객센터</Link>
               </li>
               <li>
-                <Link to="/account/orders">Order history</Link>
+                <Link to="/account/orders">주문 내역</Link>
               </li>
             </ul>
           </div>
           <div>
-            <h3>Company</h3>
+            <h3>브랜드</h3>
             <ul>
               <li>
-                <Link to="/about">About</Link>
+                <Link to="/about">브랜드 소개</Link>
               </li>
               <li>
                 <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer">
-                  Instagram <span className="sr-only">(opens in a new tab)</span>
+                  인스타그램 <span className="sr-only">(새 탭에서 열림)</span>
                 </a>
               </li>
               <li>
                 <a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer">
-                  YouTube <span className="sr-only">(opens in a new tab)</span>
+                  유튜브 <span className="sr-only">(새 탭에서 열림)</span>
                 </a>
               </li>
               <li>
                 <a href="https://www.pinterest.com/" target="_blank" rel="noopener noreferrer">
-                  Pinterest <span className="sr-only">(opens in a new tab)</span>
+                  핀터레스트 <span className="sr-only">(새 탭에서 열림)</span>
                 </a>
               </li>
             </ul>
           </div>
         </div>
         <div className="footer-bottom">
-          <span>© 2026 T.O.O.K FIT. Demo store.</span>
+          <span>© 2026 TUK FIT. 데모 스토어.</span>
           <span style={{ display: 'flex', gap: 16 }}>
-            <Link to="/privacy">Privacy</Link>
-            <Link to="/terms">Terms</Link>
+            <Link to="/privacy">개인정보처리방침</Link>
+            <Link to="/terms">이용약관</Link>
           </span>
         </div>
       </div>
@@ -391,7 +391,7 @@ function Toasts() {
                 {t.action.label}
               </Link>
             )}
-            <button type="button" aria-label="Dismiss notification" onClick={() => dismissToast(t.id)} style={{ width: 28, height: 28 }}>
+            <button type="button" aria-label="알림 닫기" onClick={() => dismissToast(t.id)} style={{ width: 28, height: 28 }}>
               ×
             </button>
           </span>
@@ -413,7 +413,7 @@ export function Layout({ children }: { children: ReactNode }) {
   return (
     <>
       <a href="#main" className="skip-link" onClick={(e) => { e.preventDefault(); document.getElementById('main')?.focus(); }}>
-        Skip to content
+        본문 바로가기
       </a>
       <ScrollToTop />
       <AnnouncementBar />

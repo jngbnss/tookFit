@@ -48,7 +48,7 @@ describe('filtering and sorting', () => {
   it('searches name, category, and description', () => {
     expect(filterProducts(PRODUCTS, { ...DEFAULT_QUERY, q: 'chelsea' }).map((p) => p.slug)).toEqual(['moor-chelsea-boots']);
     expect(filterProducts(PRODUCTS, { ...DEFAULT_QUERY, q: 'accessories' }).length).toBe(2);
-    expect(filterProducts(PRODUCTS, { ...DEFAULT_QUERY, q: 'goodyear' }).map((p) => p.slug)).toEqual(['clerk-leather-derby']);
+    expect(filterProducts(PRODUCTS, { ...DEFAULT_QUERY, q: '굿이어' }).map((p) => p.slug)).toEqual(['clerk-leather-derby']);
     expect(searchSuggestions('cab').map((p) => p.slug)).toContain('harbor-cable-knit-sweater');
   });
 

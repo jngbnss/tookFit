@@ -3,7 +3,7 @@ import { useStore } from '../state/store';
 import { ProductGrid } from './ProductCard';
 import type { Product } from '../domain/types';
 
-export function RecentlyViewed({ excludeId, title = 'Recently Viewed' }: { excludeId?: string; title?: string }) {
+export function RecentlyViewed({ excludeId, title = '최근 본 상품' }: { excludeId?: string; title?: string }) {
   const { recent } = useStore();
   const products = recent
     .filter((id) => id !== excludeId)

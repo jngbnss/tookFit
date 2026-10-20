@@ -35,14 +35,14 @@ class ErrorBoundary extends Component<{ children: ReactNode }, { error: boolean 
       return (
         <div className="container">
           <div className="empty" role="alert">
-            <h1 className="page-title">Something went wrong.</h1>
-            <p className="muted">Please reload the page. Your bag and wishlist are saved.</p>
+            <h1 className="page-title">문제가 발생했습니다.</h1>
+            <p className="muted">페이지를 새로고침해 주세요. 장바구니와 위시리스트는 저장되어 있습니다.</p>
             <div style={{ display: 'flex', gap: 8 }}>
               <button type="button" className="btn btn-primary" onClick={() => window.location.reload()}>
-                Reload
+                새로고침
               </button>
               <Link to="/" className="btn btn-secondary" onClick={() => this.setState({ error: false })}>
-                Go to home
+                홈으로
               </Link>
             </div>
           </div>
@@ -57,7 +57,7 @@ function PageLoading() {
   return (
     <div className="page-loading" role="status" aria-live="polite">
       <div className="spinner" />
-      <span className="sr-only">Loading page…</span>
+      <span className="sr-only">페이지 불러오는 중…</span>
     </div>
   );
 }

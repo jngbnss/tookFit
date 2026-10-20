@@ -11,13 +11,13 @@ export function isEmail(v: string) {
 
 export function validateShipping(s: ShippingDetails, agreed: boolean): FieldErrors<ShippingField> {
   const e: FieldErrors<ShippingField> = {};
-  if (s.fullName.trim().length < 2) e.fullName = 'Enter your full name.';
-  if (!isEmail(s.email)) e.email = 'Enter a valid email address, for example name@example.com.';
-  if (!/^0\d{1,2}-?\d{3,4}-?\d{4}$/.test(s.phone.trim())) e.phone = 'Enter a Korean phone number, for example 010-1234-5678.';
-  if (!/^\d{5}$/.test(s.postalCode.trim())) e.postalCode = 'Postal code must be 5 digits.';
-  if (s.address.trim().length < 5) e.address = 'Enter your street address.';
-  if (s.city.trim().length < 2) e.city = 'Enter your city.';
-  if (!agreed) e.terms = 'Please agree to the demo terms to continue.';
+  if (s.fullName.trim().length < 2) e.fullName = '이름을 입력해 주세요.';
+  if (!isEmail(s.email)) e.email = '올바른 이메일을 입력해 주세요. 예: name@example.com';
+  if (!/^0\d{1,2}-?\d{3,4}-?\d{4}$/.test(s.phone.trim())) e.phone = '휴대폰 번호를 입력해 주세요. 예: 010-1234-5678';
+  if (!/^\d{5}$/.test(s.postalCode.trim())) e.postalCode = '우편번호는 5자리 숫자입니다.';
+  if (s.address.trim().length < 5) e.address = '주소를 입력해 주세요.';
+  if (s.city.trim().length < 2) e.city = '시/도를 입력해 주세요.';
+  if (!agreed) e.terms = '데모 이용약관에 동의해 주세요.';
   return e;
 }
 
@@ -58,16 +58,16 @@ export function luhn(num: string) {
 export function validateCard(c: CardInput, now = new Date()): FieldErrors<keyof CardInput> {
   const e: FieldErrors<keyof CardInput> = {};
   const num = digitsOnly(c.number);
-  if (num.length !== 16 || !luhn(num)) e.number = 'Enter a valid 16-digit card number. Try 4242 4242 4242 4242.';
+  if (num.length !== 16 || !luhn(num)) e.number = '올바른 16자리 카드 번호를 입력해 주세요. 예: 4242 4242 4242 4242';
   const m = /^(\d{2})\/(\d{2})$/.exec(c.expiry);
-  if (!m) e.expiry = 'Use MM/YY format.';
+  if (!m) e.expiry = 'MM/YY 형식으로 입력해 주세요.';
   else {
     const month = Number(m[1]);
     const year = 2000 + Number(m[2]);
-    if (month < 1 || month > 12) e.expiry = 'Month must be between 01 and 12.';
-    else if (new Date(year, month, 0, 23, 59, 59) < now) e.expiry = 'This card has expired.';
+    if (month < 1 || month > 12) e.expiry = '월은 01~12 사이여야 합니다.';
+    else if (new Date(year, month, 0, 23, 59, 59) < now) e.expiry = '유효기간이 지난 카드입니다.';
   }
-  if (!/^\d{3,4}$/.test(c.cvc)) e.cvc = 'CVC must be 3 or 4 digits.';
-  if (c.name.trim().length < 2) e.name = 'Enter the name on the card.';
+  if (!/^\d{3,4}$/.test(c.cvc)) e.cvc = 'CVC는 3~4자리 숫자입니다.';
+  if (c.name.trim().length < 2) e.name = '카드 소유자 이름을 입력해 주세요.';
   return e;
 }
