@@ -102,6 +102,21 @@ export interface Order {
   payment: { method: PaymentMethod; label: string; last4?: string };
 }
 
+export interface Review {
+  id: string;
+  productId: string;
+  author: string;
+  rating: number;
+  title: string;
+  body: string;
+  option?: string;
+  fit?: string;
+  height?: number;
+  createdAt: string;
+  /** Generated demo review (vs. one written by the signed-in demo user). */
+  seeded?: boolean;
+}
+
 export interface User {
   name: string;
   email: string;

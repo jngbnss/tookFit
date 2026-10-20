@@ -9,6 +9,7 @@ import { Price } from './Price';
 import { SmartImage } from './SmartImage';
 import { Dialog } from './Overlay';
 import { PurchasePanel } from './PurchasePanel';
+import { RatingBadge } from './Reviews';
 
 export function ProductCard({ product, eager = false }: { product: Product; eager?: boolean }) {
   const { toggleWishlist, isWishlisted, notify } = useStore();
@@ -44,6 +45,7 @@ export function ProductCard({ product, eager = false }: { product: Product; eage
           <Link to={`/product/${product.slug}`}>{product.name}</Link>
         </h3>
         <Price product={product} />
+        <RatingBadge product={product} />
         <div className="card-swatches" aria-label={`색상: ${product.colors.map((c) => c.name).join(', ')}`}>
           {product.colors.map((c) => (
             <span key={c.id} className="swatch-dot" style={{ background: c.hex }} />

@@ -1,5 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
-import type { CartItem, CartTotals, Order, User } from '../domain/types';
+import type { CartItem, CartTotals, Order, Product, Review, User } from '../domain/types';
+import { demoReviews } from '../lib/reviews';
 import { getProduct } from '../lib/catalog';
 import { calculateTotals, cartKey, isValidCoupon, maxQuantity } from '../lib/pricing';
 import { readJSON, STORAGE_KEYS, writeJSON } from '../lib/storage';
@@ -44,6 +45,9 @@ interface StoreValue {
   addSearch: (q: string) => void;
   clearSearches: () => void;
 
+  reviewsFor: (product: Product) => Review[];
+  addReview: (productId: string, review: Pick<Review, 'rating' | 'title' | 'body' | 'option' | 'fit'>) => boolean;
+
   toasts: Toast[];
   notify: (message: string, action?: Toast['action']) => void;
   dismissToast: (id: number) => void;
@@ -72,6 +76,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const [orders, setOrders] = usePersistent<Order[]>(STORAGE_KEYS.orders, []);
   const [recent, setRecent] = usePersistent<string[]>(STORAGE_KEYS.recent, []);
   const [searches, setSearches] = usePersistent<string[]>(STORAGE_KEYS.searches, []);
+  const [userReviews, setUserReviews] = usePersistent<Review[]>(STORAGE_KEYS.reviews, []);
   const [cartOpen, setCartOpen] = useState(false);
   const [toasts, setToasts] = useState<Toast[]>([]);
   const toastId = useRef(0);
@@ -176,6 +181,20 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   );
   const clearSearches = useCallback(() => setSearches([]), [setSearches]);
 
+  const reviewsFor = useCallback(
+    (product: Product) => [...userReviews.filter((r) => r.productId === product.id), ...demoReviews(product)],
+    [userReviews],
+  );
+  const addReview = useCallback<StoreValue['addReview']>(
+    (productId, review) => {
+      if (!user) return false;
+      const author = user.name.length > 1 ? `${user.name[0]}*${user.name.slice(2) || ''}` : user.name;
+      setUserReviews((list) => [{ ...review, id: `${productId}-u-${Date.now()}`, productId, author, createdAt: new Date().toISOString() }, ...list]);
+      return true;
+    },
+    [user, setUserReviews],
+  );
+
   const value: StoreValue = {
     cart: validCart,
     coupon,
@@ -201,6 +220,8 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     searches,
     addSearch,
     clearSearches,
+    reviewsFor,
+    addReview,
     toasts,
     notify,
     dismissToast,

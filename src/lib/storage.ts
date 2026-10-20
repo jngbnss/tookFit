@@ -9,6 +9,8 @@ export const STORAGE_KEYS = {
   searches: 'tookfit.searches.v1',
   analytics: 'tookfit.analytics.v1',
   promoHiddenOn: 'tookfit.promo.hiddenOn.v1',
+  reviews: 'tookfit.reviews.v1',
+  theme: 'tookfit.theme.v1',
 } as const;
 
 export function readJSON<T>(key: string, fallback: T): T {

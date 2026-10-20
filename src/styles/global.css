@@ -33,6 +33,26 @@
   --t-fast: 160ms;
   --t-med: 280ms;
   --t-slow: 600ms;
+  --header-bg: rgba(247, 246, 242, 0.97);
+  --veil: rgba(247, 246, 242, 0.85);
+  color-scheme: light;
+}
+
+:root[data-theme='dark'] {
+  --bg: #121211;
+  --surface: #1b1b19;
+  --surface-2: #252522;
+  --ink: #f2f0ea;
+  --ink-2: #cbc8bf;
+  --muted: #a5a299;
+  --line: #34332f;
+  --line-strong: #57554e;
+  --accent: #f0a58f;
+  --success: #8fc79c;
+  --focus: #8ab4ff;
+  --header-bg: rgba(18, 18, 17, 0.97);
+  --veil: rgba(18, 18, 17, 0.85);
+  color-scheme: dark;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -226,7 +246,7 @@ ul {
   color: var(--bg);
 }
 .btn-primary:hover:not(:disabled) {
-  background: #2b2b2b;
+  opacity: 0.86;
 }
 .btn-secondary {
   background: transparent;
@@ -242,7 +262,7 @@ ul {
   border-color: var(--bg);
 }
 .btn-light:hover {
-  background: #fff;
+  opacity: 0.9;
 }
 .btn:disabled {
   opacity: 0.45;
@@ -465,7 +485,7 @@ ul {
   position: sticky;
   top: 0;
   z-index: 40;
-  background: rgba(247, 246, 242, 0.97);
+  background: var(--header-bg);
   border-bottom: 1px solid var(--line);
 }
 .header-inner {
@@ -755,7 +775,7 @@ ul {
   z-index: 2;
 }
 .card-wish:hover {
-  background: rgba(247, 246, 242, 0.8);
+  background: var(--veil);
 }
 .card-quick {
   position: absolute;
@@ -1139,7 +1159,7 @@ ul {
   position: fixed;
   inset: 0;
   z-index: 100;
-  background: #f7f6f2;
+  background: var(--bg);
   display: grid;
   grid-template-rows: 1fr auto;
   animation: fade var(--t-med) var(--ease);
@@ -1182,7 +1202,7 @@ ul {
   height: 64px;
   font-size: 36px;
   z-index: 2;
-  background: rgba(247, 246, 242, 0.85);
+  background: var(--veil);
 }
 .lightbox-nav.prev {
   left: var(--s3);
@@ -1639,6 +1659,11 @@ th {
   line-height: 1.25;
 }
 .newsletter {
+  /* Always a dark band, in both themes. */
+  --bg: #f7f6f2;
+  --ink: #111111;
+  --muted: #8d8a83;
+  --line-strong: #6f6d68;
   background: var(--ink);
   color: var(--bg);
   padding: var(--s8) 0;
@@ -1667,8 +1692,11 @@ th {
 }
 .newsletter .input {
   background: transparent;
-  border-color: #6f6d68;
+  border-color: var(--muted);
   color: var(--bg);
+}
+.newsletter .input::placeholder {
+  color: var(--line-strong);
 }
 .newsletter .error-text {
   color: #f0b8a8;
@@ -1856,4 +1884,103 @@ th {
 .stack {
   display: grid;
   gap: var(--s4);
+}
+
+/* Reviews ---------------------------------------------------------------- */
+.stars {
+  position: relative;
+  display: inline-block;
+  line-height: 1;
+  letter-spacing: 1px;
+}
+.stars-bg {
+  color: var(--line-strong);
+}
+.stars-fg {
+  position: absolute;
+  inset: 0 auto 0 0;
+  overflow: hidden;
+  white-space: nowrap;
+  color: var(--ink);
+}
+.rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+}
+a.rating:hover .muted:last-child {
+  text-decoration: underline;
+}
+.reviews-layout {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  gap: var(--s7);
+}
+@media (max-width: 767px) {
+  .reviews-layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--s5);
+  }
+}
+.review-summary {
+  display: grid;
+  gap: var(--s2);
+  align-content: start;
+}
+.review-average {
+  font-family: var(--font-display);
+  font-size: 48px;
+  line-height: 1;
+}
+.review-bars li {
+  display: grid;
+  grid-template-columns: 32px 1fr 24px;
+  gap: var(--s2);
+  align-items: center;
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+.review-bars .bar {
+  height: 4px;
+  background: var(--line);
+}
+.review-bars .bar span {
+  display: block;
+  height: 100%;
+  background: var(--ink);
+}
+.review {
+  padding: var(--s4) 0;
+  border-bottom: 1px solid var(--line);
+  display: grid;
+  gap: 6px;
+  font-size: 14px;
+}
+.review-head {
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+  flex-wrap: wrap;
+}
+.review-meta {
+  font-size: 12px;
+}
+.review-form {
+  background: var(--surface);
+  padding: var(--s5);
+  margin-bottom: var(--s4);
+}
+.star-input {
+  display: flex;
+  gap: 2px;
+}
+.star-input button {
+  font-size: 28px;
+  width: 40px;
+  height: 40px;
+  color: var(--line-strong);
+}
+.star-input button.on {
+  color: var(--ink);
 }

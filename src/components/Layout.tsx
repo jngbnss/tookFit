@@ -9,6 +9,7 @@ import { BagIcon, CloseIcon, HeartIcon, MenuIcon, SearchIcon, UserIcon } from '.
 import { Drawer } from './Overlay';
 import { useFocusTrap } from './useFocusTrap';
 import { AnnouncementBar, PromoPopup } from './PromoPopup';
+import { ThemeToggle } from './ThemeToggle';
 
 function SearchPanel({ onClose }: { onClose: () => void }) {
   const { searches, addSearch, clearSearches } = useStore();
@@ -201,6 +202,10 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
   const { user } = useStore();
   return (
     <Drawer open={open} onClose={onClose} title="메뉴" side="left">
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
+        <span style={{ fontSize: 14 }}>화면 테마</span>
+        <ThemeToggle />
+      </div>
       <nav className="mobile-nav" aria-label="모바일 메뉴">
         <ul>
           {COLLECTIONS.map((c) => (
@@ -262,6 +267,9 @@ function Header() {
           TUK FIT
         </Link>
         <div className="header-right">
+          <span className="hide-mobile">
+            <ThemeToggle />
+          </span>
           <Link to={user ? '/account' : '/account/sign-in'} className="icon-btn hide-mobile" aria-label={user ? `${user.name}님의 마이페이지` : '로그인'}>
             <UserIcon />
           </Link>

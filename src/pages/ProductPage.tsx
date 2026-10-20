@@ -14,6 +14,7 @@ import { Dialog } from '../components/Overlay';
 import { ProductGrid } from '../components/ProductCard';
 import { RecentlyViewed } from '../components/RecentlyViewed';
 import { CloseIcon, ShareIcon } from '../components/Icons';
+import { RatingBadge, ReviewSection } from '../components/Reviews';
 import { useFocusTrap } from '../components/useFocusTrap';
 import { SizeTables } from './Info';
 import { usePageMeta } from '../components/usePageMeta';
@@ -201,6 +202,7 @@ export default function ProductPage() {
                 </p>
               )}
               <h1>{product.name}</h1>
+              <RatingBadge product={product} link />
             </div>
             <Price product={product} className="pdp-price" />
             <p style={{ color: 'var(--ink-2)' }}>{product.description}</p>
@@ -244,6 +246,8 @@ export default function ProductPage() {
           </div>
         </div>
       </div>
+
+      <ReviewSection product={product} />
 
       {related.length > 0 && (
         <section className="section container" aria-labelledby="related-title">

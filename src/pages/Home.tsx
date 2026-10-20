@@ -62,7 +62,7 @@ function Newsletter() {
                 {error}
               </p>
             ) : (
-              <p id="nl-note" style={{ fontSize: 12, color: '#b9b6ae' }}>
+              <p id="nl-note" style={{ fontSize: 12, color: 'var(--muted)' }}>
                 샘플 주소를 사용하세요. 언제든 구독 해지할 수 있습니다.
               </p>
             )}
