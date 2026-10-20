@@ -6,7 +6,8 @@ import { cartKey } from '../lib/pricing';
 import { findVariant, product, renderApp } from './utils';
 
 const ROUTES: [string, RegExp][] = [
-  ['/', /추위를 위해/],
+  ['/', /덜어낼수록 선명해진다/],
+  ['/explore', /탐색/],
   ['/shop/all', /전체 상품/],
   ['/shop/outerwear', /^아우터$/],
   ['/shop/sale', /^세일$/],

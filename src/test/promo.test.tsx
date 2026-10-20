@@ -28,7 +28,7 @@ describe('promo popup and announcement', () => {
     expect(isPromoHidden()).toBe(true);
     first.unmount();
     renderApp('/');
-    await screen.findByRole('heading', { level: 1, name: /추위를 위해/ });
+    await screen.findByRole('heading', { level: 1, name: /덜어낼수록 선명해진다/ });
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
@@ -42,6 +42,6 @@ describe('promo popup and announcement', () => {
     await user.keyboard('{Escape}');
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: '공지 닫기' }));
-    expect(screen.queryByText(/쿠폰 TUK10 10% 할인/)).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: '공지 닫기' })).not.toBeInTheDocument();
   });
 });

@@ -1,0 +1,18 @@
+/* Tailwind utilities only — the base reset is skipped so it doesn't fight global.css. */
+@layer theme, utilities;
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities.css' layer(utilities);
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-mood-bg: var(--mood-bg);
+  --color-mood-ink: var(--mood-ink);
+  --color-mood-accent: var(--mood-accent);
+  --color-mood-soft: var(--mood-soft);
+  --font-mood: var(--mood-font);
+  --font-display: var(--font-display);
+}

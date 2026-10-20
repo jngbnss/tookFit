@@ -2,9 +2,15 @@ import { Component, lazy, Suspense, type ReactNode } from 'react';
 import { Link, Route, Routes } from 'react-router-dom';
 import { Layout } from './components/Layout';
 import { StoreProvider } from './state/store';
-import Home from './pages/Home';
+import { useLocation } from 'react-router-dom';
+import { motion, useReducedMotion } from 'motion/react';
+import Landing from './pages/Landing';
+import { MoodProvider } from './cinematic/MoodContext';
+import { DragToCartProvider } from './cinematic/DragToCart';
+import { CustomCursor } from './cinematic/CustomCursor';
 
 const Catalog = lazy(() => import('./pages/Catalog'));
+const Explore = lazy(() => import('./pages/Explore'));
 const ProductPage = lazy(() => import('./pages/ProductPage'));
 const Wishlist = lazy(() => import('./pages/Wishlist'));
 const Cart = lazy(() => import('./pages/Cart'));
@@ -62,13 +68,26 @@ function PageLoading() {
   );
 }
 
+/** Soft cinematic fade/rise between routes. New pages render immediately (no exit wait) so navigation never stalls. */
+function PageTransition({ children }: { children: ReactNode }) {
+  const { pathname } = useLocation();
+  const reduce = useReducedMotion();
+  return (
+    <motion.div key={pathname} initial={reduce ? false : { opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, ease: [0.2, 0.7, 0.2, 1] }}>
+      {children}
+    </motion.div>
+  );
+}
+
 export function AppRoutes() {
   return (
     <Layout>
       <ErrorBoundary>
         <Suspense fallback={<PageLoading />}>
+          <PageTransition>
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<Landing />} />
+            <Route path="/explore" element={<Explore />} />
             <Route path="/shop" element={<Catalog />} />
             <Route path="/shop/:collection" element={<Catalog />} />
             <Route path="/search" element={<Catalog search />} />
@@ -92,6 +111,7 @@ export function AppRoutes() {
             <Route path="/terms" element={<Terms />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
+          </PageTransition>
         </Suspense>
       </ErrorBoundary>
     </Layout>
@@ -101,7 +121,12 @@ export function AppRoutes() {
 export default function App() {
   return (
     <StoreProvider>
-      <AppRoutes />
+      <MoodProvider>
+        <DragToCartProvider>
+          <AppRoutes />
+          <CustomCursor />
+        </DragToCartProvider>
+      </MoodProvider>
     </StoreProvider>
   );
 }

@@ -6,6 +6,8 @@ import { useStore } from '../state/store';
 import { HeartIcon } from './Icons';
 import { Price } from './Price';
 import { formatKRW } from '../lib/format';
+import { primaryImage } from '../lib/catalog';
+import { flyToCart } from '../cinematic/flyToCart';
 
 interface Props {
   product: Product;
@@ -48,7 +50,7 @@ export function PurchasePanel({ product, mode = 'full', onAdded, onSizeGuide, on
     setQuantity((q) => Math.max(1, Math.min(q, colorId ? maxQuantity(product, colorId, s) : 5)));
   }
 
-  function submit(buyNow: boolean) {
+  function submit(buyNow: boolean, from?: Element) {
     const next: typeof errors = {};
     if (!colorId) next.color = '색상을 선택해 주세요.';
     if (!size) next.size = '사이즈를 선택해 주세요.';
@@ -63,6 +65,7 @@ export function PurchasePanel({ product, mode = 'full', onAdded, onSizeGuide, on
       return;
     }
     setErrors({});
+    if (from) flyToCart(from, primaryImage(product, colorId).src);
     if (buyNow) {
       navigate('/checkout');
       return;
@@ -196,7 +199,7 @@ export function PurchasePanel({ product, mode = 'full', onAdded, onSizeGuide, on
       )}
 
       <div className="pdp-actions" style={mode === 'quick' ? { gridTemplateColumns: '1fr' } : undefined}>
-        <button type="button" className="btn btn-primary" onClick={() => submit(false)} disabled={stock === 0}>
+        <button type="button" className="btn btn-primary" onClick={(e) => submit(false, e.currentTarget)} disabled={stock === 0}>
           장바구니 담기
         </button>
         {mode === 'full' && (
@@ -217,7 +220,7 @@ export function PurchasePanel({ product, mode = 'full', onAdded, onSizeGuide, on
             <div>{product.name}</div>
             <Price product={product} />
           </div>
-          <button type="button" className="btn btn-primary" onClick={() => submit(false)} disabled={stock === 0}>
+          <button type="button" className="btn btn-primary" onClick={(e) => submit(false, e.currentTarget)} disabled={stock === 0}>
             담기 · {formatKRW(product.price * quantity)}
           </button>
         </div>

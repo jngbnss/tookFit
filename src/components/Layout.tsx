@@ -208,6 +208,12 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
       </div>
       <nav className="mobile-nav" aria-label="모바일 메뉴">
         <ul>
+          <li>
+            <Link to="/explore" onClick={onClose}>
+              탐색 캔버스
+              <span aria-hidden="true">→</span>
+            </Link>
+          </li>
           {COLLECTIONS.map((c) => (
             <li key={c.slug}>
               <Link to={`/shop/${c.slug}`} onClick={onClose} style={c.slug === 'sale' ? { color: 'var(--accent)' } : undefined}>
@@ -277,7 +283,7 @@ function Header() {
             <HeartIcon />
             {wishlist.length > 0 && <span className="count-badge" aria-hidden="true">{wishlist.length}</span>}
           </Link>
-          <button type="button" className="icon-btn" aria-label={`장바구니 열기, ${totals.itemCount}개`} onClick={() => setCartOpen(true)}>
+          <button type="button" className="icon-btn" data-cart-target aria-label={`장바구니 열기, ${totals.itemCount}개`} onClick={() => setCartOpen(true)}>
             <BagIcon />
             {totals.itemCount > 0 && <span className="count-badge" aria-hidden="true">{totals.itemCount}</span>}
           </button>
@@ -285,6 +291,11 @@ function Header() {
       </div>
       <nav className="nav" aria-label="주 메뉴">
         <ul className="container">
+          <li>
+            <NavLink to="/explore" className="explore-link">
+              탐색
+            </NavLink>
+          </li>
           {COLLECTIONS.map((c) => (
             <li key={c.slug}>
               <NavLink to={`/shop/${c.slug}`} className={c.slug === 'sale' ? 'sale-link' : undefined}>

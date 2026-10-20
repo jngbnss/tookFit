@@ -19,6 +19,39 @@ import { useFocusTrap } from '../components/useFocusTrap';
 import { SizeTables } from './Info';
 import { usePageMeta } from '../components/usePageMeta';
 import NotFound from './NotFound';
+import { motion } from 'motion/react';
+
+function ProductStory({ product, colorId }: { product: Product; colorId: string | null }) {
+  const images = imagesFor(product, colorId);
+  const steps = [
+    { label: '01 소재', title: '손끝에서 시작되는 차이', body: product.material, image: images[1] ?? images[0] },
+    { label: '02 핏', title: '입었을 때 완성되는 실루엣', body: product.fit, image: images[0] },
+    { label: '03 관리', title: '오래 입기 위한 방법', body: product.care.join(' · '), image: images[1] ?? images[0] },
+  ];
+  return (
+    <section className="pdp-story container" aria-label="상품 이야기">
+      {steps.map((s, i) => (
+        <motion.article
+          key={s.label}
+          className={`pdp-story-step ${i % 2 ? 'flip' : ''}`}
+          initial={{ opacity: 0, y: 60 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-15%' }}
+          transition={{ duration: 0.7, ease: [0.2, 0.7, 0.2, 1] }}
+        >
+          <motion.div className="pdp-story-media" initial={{ clipPath: 'inset(0 0 100% 0)' }} whileInView={{ clipPath: 'inset(0 0 0% 0)' }} viewport={{ once: true, margin: '-15%' }} transition={{ duration: 0.9, ease: [0.2, 0.7, 0.2, 1] }}>
+            <img src={asset(s.image.src)} alt={s.image.alt} loading="lazy" width={1024} height={1280} />
+          </motion.div>
+          <div className="pdp-story-copy">
+            <p className="eyebrow">{s.label}</p>
+            <h2>{s.title}</h2>
+            <p>{s.body}</p>
+          </div>
+        </motion.article>
+      ))}
+    </section>
+  );
+}
 
 /** Full-screen viewer: click or tap to zoom 2.5×, move the pointer to pan, arrows to switch images. */
 function Lightbox({ images, start, onClose }: { images: ProductImage[]; start: number; onClose: () => void }) {
@@ -247,6 +280,7 @@ export default function ProductPage() {
         </div>
       </div>
 
+      <ProductStory product={product} colorId={colorId} />
       <ReviewSection product={product} />
 
       {related.length > 0 && (
