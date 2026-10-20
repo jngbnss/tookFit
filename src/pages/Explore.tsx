@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState, type RefObject } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { motion, useReducedMotion } from 'motion/react';
+import { motion } from 'motion/react';
 import { LayoutGrid, Move, Plus, Search, Shuffle } from 'lucide-react';
 import { CATEGORIES, PRODUCTS } from '../data/products';
 import { MOODS, type MoodId } from '../data/moods';
@@ -37,10 +37,9 @@ function useWidth<T extends HTMLElement>() {
   return [ref, width] as const;
 }
 
-function CanvasCard({ product, x, y, rotate, constraints, index }: { product: Product; x: number; y: number; rotate: number; constraints: RefObject<HTMLDivElement | null>; index: number }) {
+function CanvasCard({ product, x, y, rotate, constraints }: { product: Product; x: number; y: number; rotate: number; constraints: RefObject<HTMLDivElement | null> }) {
   const dnd = useDragToCart();
   const navigate = useNavigate();
-  const reduce = useReducedMotion();
   const dragged = useRef(false);
   const [z, setZ] = useState(1);
   const img = primaryImage(product);
@@ -49,12 +48,7 @@ function CanvasCard({ product, x, y, rotate, constraints, index }: { product: Pr
   return (
     <motion.div
       className="canvas-card"
-      style={{ left: x, top: y, zIndex: z }}
-      initial={reduce ? false : { opacity: 0, scale: 0.6, rotate: rotate * 3 }}
-      animate={{ opacity: dnd.dragging?.id === product.id ? 0.85 : 1, scale: 1, rotate }}
-      transition={{ type: 'spring', stiffness: 220, damping: 22, delay: reduce ? 0 : index * 0.025 }}
-      whileHover={{ scale: 1.08, rotate: 0, zIndex: 50 }}
-      whileDrag={{ scale: 1.12, rotate: 0, zIndex: 60, cursor: 'grabbing' }}
+      style={{ left: x, top: y, zIndex: z, rotate }}
       drag
       dragConstraints={constraints}
       dragElastic={0.15}
@@ -69,8 +63,6 @@ function CanvasCard({ product, x, y, rotate, constraints, index }: { product: Pr
         dnd.end({ x: info.point.x - window.scrollX, y: info.point.y - window.scrollY });
         window.setTimeout(() => (dragged.current = false), 0);
       }}
-      data-cursor="drag"
-      data-cursor-label="DRAG"
     >
       <Link
         to={`/product/${product.slug}`}
@@ -106,7 +98,7 @@ function CanvasCard({ product, x, y, rotate, constraints, index }: { product: Pr
         className="canvas-add"
         aria-label={`${product.name} 장바구니에 담기`}
         onPointerDown={(e) => e.stopPropagation()}
-        onClick={(e) => dnd.addDefault(product, e.currentTarget)}
+        onClick={() => dnd.addDefault(product)}
       >
         <Plus size={16} />
       </button>
@@ -166,14 +158,14 @@ export default function Explore() {
           {activeMood ? activeMood.label : category ? CATEGORIES.find((c) => c.slug === category)?.label : '탐색'}
         </h1>
         <p className="explore-sub">
-          {view === 'canvas' ? '카드를 자유롭게 옮기고, 장바구니로 끌어다 놓아 담아보세요.' : '목록으로 한눈에 비교해 보세요.'}
+          {view === 'canvas' ? '카드를 옮겨 나란히 비교하고, 장바구니 아이콘으로 끌어 담을 수 있습니다.' : '전체 상품을 목록으로 봅니다.'}
         </p>
 
         <div className="explore-toolbar">
           <label className="explore-search">
             <Search size={16} aria-hidden="true" />
             <span className="sr-only">상품 검색</span>
-            <input type="search" placeholder="상품명, 소재, 색상 검색" value={q} onChange={(e) => set('q', e.target.value)} />
+            <input type="search" placeholder="상품명, 소재, 색상으로 검색" value={q} onChange={(e) => set('q', e.target.value)} />
           </label>
           <label className="explore-sort">
             <span className="sr-only">정렬</span>
@@ -228,7 +220,7 @@ export default function Explore() {
           <span aria-live="polite">상품 {results.length}개</span>
           {view === 'canvas' && results.length > 0 && (
             <button type="button" className="btn-text" onClick={() => setShuffleSeed((s) => s + 1)}>
-              <Shuffle size={14} /> 다시 흩뿌리기
+              <Shuffle size={14} /> 배치 초기화
             </button>
           )}
         </div>
@@ -249,7 +241,7 @@ export default function Explore() {
         <div className="container">
           <div ref={canvasRef} className="canvas" style={{ height: rows * cellH + cellH * 0.4 }}>
             {results.map((p, i) => (
-              <CanvasCard key={`${p.id}-${shuffleSeed}`} product={p} index={i} constraints={canvasRef} {...positions[i]} />
+              <CanvasCard key={`${p.id}-${shuffleSeed}`} product={p} constraints={canvasRef} {...positions[i]} />
             ))}
           </div>
         </div>

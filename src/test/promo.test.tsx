@@ -13,7 +13,7 @@ describe('promo popup and announcement', () => {
     renderApp('/');
     const dialog = await screen.findByRole('dialog', { name: /₩100,000 이상 무료배송/ });
     await user.click(within(dialog).getByRole('button', { name: '혜택 2 / 2' }));
-    expect(within(dialog).getByRole('heading', { name: /TUK10/ })).toBeInTheDocument();
+    expect(within(dialog).getByRole('heading', { name: /첫 주문 10% 할인/ })).toBeInTheDocument();
     await user.click(within(dialog).getByRole('button', { name: '닫기' }));
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
     expect(isPromoHidden()).toBe(false);

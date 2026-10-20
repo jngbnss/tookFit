@@ -399,14 +399,14 @@ const seeds: Seed[] = [
 export const PRODUCTS: Product[] = seeds.map(build);
 
 export const CATEGORIES: { slug: CategorySlug; label: string; blurb: string }[] = [
-  { slug: 'outerwear', label: '아우터', blurb: '추운 도시를 위한 코트, 패딩, 레더 재킷.' },
-  { slug: 'knitwear', label: '니트', blurb: '램스울, 메리노, 모헤어로 짠 정직한 니트.' },
-  { slug: 'tops', label: '상의', blurb: '헤비웨이트 코튼, 옥스포드, 플란넬 레이어.' },
-  { slug: 'bottoms', label: '하의', blurb: '와이드 울, 코듀로이, 데님, 카고.' },
-  { slug: 'sets', label: '세트', blurb: '함께 입어도, 따로 입어도 좋은 셋업.' },
-  { slug: 'shoes', label: '신발', blurb: '더비, 부츠, 윈터 스니커즈.' },
-  { slug: 'bags', label: '가방', blurb: '캔버스와 나일론으로 만든 데일리 백.' },
-  { slug: 'accessories', label: '액세서리', blurb: '가장 추운 날을 위한 머플러와 비니.' },
+  { slug: 'outerwear', label: '아우터', blurb: '계절을 건너는 코트와 재킷.' },
+  { slug: 'knitwear', label: '니트', blurb: '좋은 원사로 촘촘히 짠 니트.' },
+  { slug: 'tops', label: '상의', blurb: '매일 손이 가는 셔츠와 티셔츠.' },
+  { slug: 'bottoms', label: '하의', blurb: '실루엣을 완성하는 팬츠.' },
+  { slug: 'sets', label: '세트', blurb: '함께, 또 따로 입는 셋업.' },
+  { slug: 'shoes', label: '신발', blurb: '하루를 받쳐주는 신발.' },
+  { slug: 'bags', label: '가방', blurb: '일상을 담는 가방.' },
+  { slug: 'accessories', label: '액세서리', blurb: '마무리를 위한 소품.' },
 ];
 
 export const COLLECTIONS: { slug: string; label: string }[] = [

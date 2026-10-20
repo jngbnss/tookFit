@@ -32,7 +32,7 @@ export default function Cart() {
         <>
           <div className="empty">
             <h2>장바구니가 비어 있습니다</h2>
-            <p className="muted">시즌 필수 아이템으로 시작하거나 위시리스트를 확인해 보세요.</p>
+            <p className="muted">이번 시즌의 옷을 둘러보거나, 저장해 둔 위시리스트를 확인해 보세요.</p>
             <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', justifyContent: 'center' }}>
               <Link to="/shop/all" className="btn btn-primary">
                 쇼핑 계속하기
@@ -44,7 +44,7 @@ export default function Cart() {
           </div>
           <section aria-labelledby="pop-title">
             <div className="section-head">
-              <h2 id="pop-title">지금 인기 있는 상품</h2>
+              <h2 id="pop-title">많이 찾는 옷</h2>
             </div>
             <ProductGrid products={fallbackRecs} />
           </section>
@@ -83,7 +83,7 @@ export default function Cart() {
       {cart.length > 0 && recommendations.length > 0 && (
         <section className="section" aria-labelledby="rec-title">
           <div className="section-head">
-            <h2 id="rec-title">함께 코디하기 좋은 상품</h2>
+            <h2 id="rec-title">함께 입기 좋은 옷</h2>
           </div>
           <ProductGrid products={recommendations as typeof PRODUCTS} />
         </section>

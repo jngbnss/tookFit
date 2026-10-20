@@ -91,7 +91,7 @@ function SearchPanel({ onClose }: { onClose: () => void }) {
                 </ul>
               </div>
             )}
-            {q.trim().length >= 2 && suggestions.length === 0 && <p className="muted">일치하는 상품이 없습니다. “울”, “니트”, “부츠”로 검색해 보세요.</p>}
+            {q.trim().length >= 2 && suggestions.length === 0 && <p className="muted">찾으시는 상품이 없습니다. ‘울’, ‘니트’, ‘부츠’처럼 검색해 보세요.</p>}
             {searches.length > 0 && (
               <div>
                 <p className="eyebrow" style={{ marginBottom: 8 }}>
@@ -175,7 +175,7 @@ function CartDrawer() {
     >
       {cart.length === 0 ? (
         <div className="empty" style={{ padding: '48px 0' }}>
-          <p>장바구니가 비어 있습니다.</p>
+          <p>아직 담긴 상품이 없습니다.</p>
           <button
             type="button"
             className="btn btn-primary"
@@ -184,7 +184,7 @@ function CartDrawer() {
               navigate('/shop/new-arrivals');
             }}
           >
-            신상품 보러가기
+            새로 들어온 옷 보기
           </button>
         </div>
       ) : (
@@ -210,7 +210,7 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
         <ul>
           <li>
             <Link to="/explore" onClick={onClose}>
-              탐색 캔버스
+              탐색
               <span aria-hidden="true">→</span>
             </Link>
           </li>
@@ -322,10 +322,10 @@ function Footer() {
               TUK FIT
             </span>
             <p className="muted" style={{ maxWidth: 320 }}>
-              추운 도시를 위한 조용한 남성복. 서울에서 디자인하고 소량 생산합니다.
+              차가운 계절을 위한 정제된 남성복. 서울에서 디자인합니다.
             </p>
             <p className="muted" style={{ fontSize: 12, maxWidth: 340 }}>
-              프론트엔드 데모 스토어입니다. 실제 주문, 결제, 계정은 처리되지 않습니다.
+              이 사이트는 데모입니다. 실제 주문과 결제는 이루어지지 않습니다.
             </p>
           </div>
           <div>

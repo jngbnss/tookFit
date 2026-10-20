@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest';
 import { MOODS } from '../data/moods';
 import { PRODUCTS } from '../data/products';
 import { STORAGE_KEYS } from '../lib/storage';
-import { defaultVariant } from '../cinematic/flyToCart';
+import { defaultVariant } from '../cinematic/defaultVariant';
 import { renderApp } from './utils';
 
 describe('explore', () => {

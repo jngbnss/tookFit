@@ -1,10 +1,9 @@
 import { createContext, useCallback, useContext, useRef, useState, type ReactNode } from 'react';
-import { AnimatePresence, motion } from 'motion/react';
 import { ShoppingBag } from 'lucide-react';
 import type { Product } from '../domain/types';
-import { getProduct, primaryImage } from '../lib/catalog';
+import { getProduct } from '../lib/catalog';
 import { useStore } from '../state/store';
-import { defaultVariant, flyToCart } from './flyToCart';
+import { defaultVariant } from './defaultVariant';
 
 interface DragCtx {
   dragging: Product | null;
@@ -13,7 +12,7 @@ interface DragCtx {
   move: (point: { x: number; y: number }) => void;
   /** Returns true when the drop landed on the cart and the item was added. */
   end: (point: { x: number; y: number }) => boolean;
-  addDefault: (p: Product, from?: Element | { x: number; y: number }) => boolean;
+  addDefault: (p: Product) => boolean;
 }
 
 const Ctx = createContext<DragCtx | null>(null);
@@ -33,7 +32,7 @@ export function DragToCartProvider({ children }: { children: ReactNode }) {
   const hit = (point: { x: number; y: number }) => inside(dockRef.current, point) || inside(document.querySelector('[data-cart-target]'), point);
 
   const addDefault = useCallback(
-    (p: Product, from?: Element | { x: number; y: number }) => {
+    (p: Product) => {
       const v = defaultVariant(p);
       if (!v) {
         notify(`${p.name}은(는) 현재 품절입니다.`);
@@ -45,8 +44,7 @@ export function DragToCartProvider({ children }: { children: ReactNode }) {
         return false;
       }
       const color = p.colors.find((c) => c.id === v.colorId)?.name;
-      notify(`${p.name} (${color} / ${v.size}) 담김 — 옵션은 상세 페이지에서 바꿀 수 있어요.`, { label: '장바구니', to: '/cart' });
-      if (from) flyToCart(from, primaryImage(p, v.colorId).src);
+      notify(`${p.name} · ${color} / ${v.size}을(를) 담았습니다. 옵션은 상품 페이지에서 변경할 수 있습니다.`, { label: '장바구니', to: '/cart' });
       return true;
     },
     [addToCart, notify],
@@ -59,7 +57,7 @@ export function DragToCartProvider({ children }: { children: ReactNode }) {
     move: (point) => setOver(hit(point)),
     end: (point) => {
       const p = dragging;
-      const ok = !!p && hit(point) && addDefault(p, point);
+      const ok = !!p && hit(point) && addDefault(p);
       setDragging(null);
       setOver(false);
       return ok;
@@ -70,23 +68,12 @@ export function DragToCartProvider({ children }: { children: ReactNode }) {
   return (
     <Ctx.Provider value={value}>
       {children}
-      <AnimatePresence>
-        {dragging && (
-          <motion.div
-            ref={dockRef}
-            className="cart-dock"
-            data-over={over}
-            initial={{ opacity: 0, y: 40, scale: 0.9 }}
-            animate={{ opacity: 1, y: 0, scale: over ? 1.08 : 1 }}
-            exit={{ opacity: 0, y: 40, scale: 0.9 }}
-            transition={{ type: 'spring', stiffness: 380, damping: 28 }}
-            aria-hidden="true"
-          >
-            <ShoppingBag size={28} strokeWidth={1.5} />
-            <span>{over ? '놓으면 담겨요' : '여기로 끌어다 놓기'}</span>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {dragging && (
+        <div ref={dockRef} className="cart-dock" data-over={over} aria-hidden="true">
+          <ShoppingBag size={28} strokeWidth={1.5} />
+          <span>{over ? '놓으면 담깁니다' : '장바구니에 놓기'}</span>
+        </div>
+      )}
     </Ctx.Provider>
   );
 }

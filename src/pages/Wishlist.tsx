@@ -26,7 +26,7 @@ export default function Wishlist() {
       {products.length === 0 ? (
         <div className="empty">
           <h2>위시리스트가 비어 있습니다</h2>
-          <p className="muted">상품의 하트를 눌러 나중에 볼 상품을 저장하세요.</p>
+          <p className="muted">마음에 드는 옷의 하트를 눌러 저장해 두세요.</p>
           <Link to="/shop/all" className="btn btn-primary">
             컬렉션 둘러보기
           </Link>

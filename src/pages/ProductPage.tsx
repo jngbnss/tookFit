@@ -19,35 +19,27 @@ import { useFocusTrap } from '../components/useFocusTrap';
 import { SizeTables } from './Info';
 import { usePageMeta } from '../components/usePageMeta';
 import NotFound from './NotFound';
-import { motion } from 'motion/react';
 
 function ProductStory({ product, colorId }: { product: Product; colorId: string | null }) {
   const images = imagesFor(product, colorId);
   const steps = [
-    { label: '01 소재', title: '손끝에서 시작되는 차이', body: product.material, image: images[1] ?? images[0] },
-    { label: '02 핏', title: '입었을 때 완성되는 실루엣', body: product.fit, image: images[0] },
-    { label: '03 관리', title: '오래 입기 위한 방법', body: product.care.join(' · '), image: images[1] ?? images[0] },
+    { label: '01 소재', title: '좋은 옷은 원단에서 시작됩니다', body: product.material, image: images[1] ?? images[0] },
+    { label: '02 핏', title: '몸을 따라 자연스럽게 떨어지는 선', body: product.fit, image: images[0] },
+    { label: '03 관리', title: '오래 곁에 두는 방법', body: product.care.join(' · '), image: images[1] ?? images[0] },
   ];
   return (
     <section className="pdp-story container" aria-label="상품 이야기">
       {steps.map((s, i) => (
-        <motion.article
-          key={s.label}
-          className={`pdp-story-step ${i % 2 ? 'flip' : ''}`}
-          initial={{ opacity: 0, y: 60 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-15%' }}
-          transition={{ duration: 0.7, ease: [0.2, 0.7, 0.2, 1] }}
-        >
-          <motion.div className="pdp-story-media" initial={{ clipPath: 'inset(0 0 100% 0)' }} whileInView={{ clipPath: 'inset(0 0 0% 0)' }} viewport={{ once: true, margin: '-15%' }} transition={{ duration: 0.9, ease: [0.2, 0.7, 0.2, 1] }}>
+        <article key={s.label} className={`pdp-story-step ${i % 2 ? 'flip' : ''}`}>
+          <div className="pdp-story-media">
             <img src={asset(s.image.src)} alt={s.image.alt} loading="lazy" width={1024} height={1280} />
-          </motion.div>
+          </div>
           <div className="pdp-story-copy">
             <p className="eyebrow">{s.label}</p>
             <h2>{s.title}</h2>
             <p>{s.body}</p>
           </div>
-        </motion.article>
+        </article>
       ))}
     </section>
   );
@@ -286,7 +278,7 @@ export default function ProductPage() {
       {related.length > 0 && (
         <section className="section container" aria-labelledby="related-title">
           <div className="section-head">
-            <h2 id="related-title">함께 입기 좋은 상품</h2>
+            <h2 id="related-title">함께 입기 좋은 옷</h2>
           </div>
           <ProductGrid products={related} />
         </section>

@@ -1,4 +1,4 @@
-import { useEffect, useId, useState } from 'react';
+import { useId, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { asset } from '../lib/format';
 import { readJSON, STORAGE_KEYS, writeJSON } from '../lib/storage';
@@ -6,18 +6,18 @@ import { useFocusTrap } from './useFocusTrap';
 
 const SLIDES = [
   {
-    eyebrow: '배송 혜택',
+    eyebrow: 'Delivery',
     title: '₩100,000 이상 무료배송',
-    body: '모든 주문 14일 이내 무료 반품.',
-    cta: { label: '신상품 보러가기', to: '/shop/new-arrivals' },
+    body: '받으신 날로부터 14일 안에는 반품도 무료입니다.',
+    cta: { label: '새로 들어온 옷', to: '/shop/new-arrivals' },
     image: 'images/editorial/editorial-03.webp',
     alt: '따뜻한 스튜디오의 네이비 다운 패딩과 크림 윈터 스니커즈',
   },
   {
-    eyebrow: '웰컴 쿠폰',
-    title: 'TUK10 코드로 10% 할인',
-    body: '최대 ₩20,000 할인. 장바구니나 주문서에서 입력하세요.',
-    cta: { label: '아우터 보러가기', to: '/shop/outerwear' },
+    eyebrow: 'Welcome',
+    title: '첫 주문 10% 할인',
+    body: '쿠폰 코드 TUK10 · 최대 ₩20,000까지 적용됩니다.',
+    cta: { label: '아우터 둘러보기', to: '/shop/outerwear' },
     image: 'images/editorial/hero-mobile-01.webp',
     alt: '스튜디오의 블랙 울 코트, 크림 케이블 니트, 블랙 부츠',
   },
@@ -44,12 +44,6 @@ export function PromoPopup() {
   }
 
   const ref = useFocusTrap<HTMLDivElement>(open, close);
-
-  useEffect(() => {
-    if (!open || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
-    const t = window.setInterval(() => setIndex((i) => (i + 1) % SLIDES.length), 5000);
-    return () => window.clearInterval(t);
-  }, [open]);
 
   if (!open) return null;
   const slide = SLIDES[index];
@@ -98,7 +92,7 @@ export function AnnouncementBar() {
   return (
     <div className="announcement">
       <span>
-        ₩100,000 이상 무료배송 · 쿠폰 TUK10 10% 할인 · <Link to="/shipping-returns">14일 무료 반품</Link>
+        ₩100,000 이상 무료배송 · 첫 주문 10% 할인 TUK10 · <Link to="/shipping-returns">14일 무료 반품</Link>
       </span>
       <button
         type="button"

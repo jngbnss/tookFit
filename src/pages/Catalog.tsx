@@ -29,10 +29,10 @@ const SIZE_GROUPS: { label: string; sizes: string[] }[] = [
 const VALID: CollectionSlug[] = ['all', 'new-arrivals', 'best-sellers', 'sale', ...CATEGORIES.map((c) => c.slug)];
 
 const DESCRIPTIONS: Partial<Record<CollectionSlug, string>> = {
-  all: '아우터부터 니트, 이너까지 F/W 컬렉션 전체.',
-  'new-arrivals': '이번 시즌 새로 입고된 상품.',
-  'best-sellers': '고객들이 다시 찾는 인기 상품.',
-  sale: '사이즈 소진 시까지 진행되는 할인 상품.',
+  all: '2026 가을·겨울 컬렉션 전체.',
+  'new-arrivals': '새로 도착한 옷.',
+  'best-sellers': '가장 많이 선택된 옷.',
+  sale: '시즌 오프 상품. 사이즈가 소진되면 종료됩니다.',
 };
 
 function toggle<T>(list: T[], value: T): T[] {

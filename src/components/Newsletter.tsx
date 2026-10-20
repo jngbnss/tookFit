@@ -22,12 +22,12 @@ export function Newsletter() {
     <section className="newsletter" aria-labelledby="nl-title">
       <div className="container newsletter-inner">
         <div>
-          <p className="eyebrow">뉴스레터</p>
-          <h2 id="nl-title">신상품과 시크릿 세일 소식을 가장 먼저 받아보세요.</h2>
+          <p className="eyebrow">Newsletter</p>
+          <h2 id="nl-title">새 컬렉션 소식을 가장 먼저 전해드립니다.</h2>
         </div>
         {done ? (
           <p className="notice notice-success" role="status">
-            구독해 주셔서 감사합니다. (데모: 이메일은 발송·저장되지 않습니다.)
+            구독이 완료되었습니다. (데모: 실제 메일은 발송되지 않습니다.)
           </p>
         ) : (
           <form onSubmit={submit} noValidate>
@@ -55,7 +55,7 @@ export function Newsletter() {
               </p>
             ) : (
               <p id="nl-note" style={{ fontSize: 12, color: 'var(--muted)' }}>
-                샘플 주소를 사용하세요. 언제든 구독 해지할 수 있습니다.
+                언제든 수신을 해지할 수 있습니다. 샘플 주소를 사용해 주세요.
               </p>
             )}
           </form>
