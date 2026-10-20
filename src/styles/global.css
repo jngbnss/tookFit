@@ -385,6 +385,75 @@ ul {
   text-align: center;
   padding: 8px var(--gutter);
 }
+.announcement {
+  position: relative;
+  padding-right: 44px;
+}
+.announcement-close {
+  position: absolute;
+  right: var(--s2);
+  top: 50%;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 32px;
+  color: var(--bg);
+  font-size: 18px;
+  line-height: 1;
+}
+.promo {
+  position: fixed;
+  z-index: 90;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: min(400px, calc(100vw - 32px));
+  max-height: calc(100vh - 32px);
+  overflow-y: auto;
+  background: var(--bg);
+  padding: var(--s4);
+  display: grid;
+  gap: var(--s3);
+  animation: fade var(--t-med) var(--ease);
+}
+.promo-media img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  background: var(--surface-2);
+}
+.promo-copy {
+  display: grid;
+  gap: var(--s2);
+  justify-items: start;
+}
+.promo-copy h2 {
+  font-family: var(--font-display);
+  font-size: 30px;
+}
+.promo-dots {
+  display: flex;
+  justify-content: center;
+  gap: var(--s1);
+}
+.promo-dots button {
+  width: 24px;
+  height: 24px;
+  position: relative;
+}
+.promo-dots button::after {
+  content: '';
+  position: absolute;
+  inset: 8px;
+  border-radius: 50%;
+  background: var(--line-strong);
+}
+.promo-dots button[aria-pressed='true']::after {
+  background: var(--ink);
+}
+.promo-today {
+  justify-content: flex-end;
+  font-size: 13px;
+}
 .announcement a {
   text-decoration: underline;
   text-underline-offset: 2px;

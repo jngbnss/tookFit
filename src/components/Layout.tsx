@@ -8,6 +8,7 @@ import { CartLine, FreeShippingProgress } from './CartParts';
 import { BagIcon, CloseIcon, HeartIcon, MenuIcon, SearchIcon, UserIcon } from './Icons';
 import { Drawer } from './Overlay';
 import { useFocusTrap } from './useFocusTrap';
+import { AnnouncementBar, PromoPopup } from './PromoPopup';
 
 function SearchPanel({ onClose }: { onClose: () => void }) {
   const { searches, addSearch, clearSearches } = useStore();
@@ -415,15 +416,14 @@ export function Layout({ children }: { children: ReactNode }) {
         Skip to content
       </a>
       <ScrollToTop />
-      <div className="announcement">
-        Free shipping over ₩100,000 · Use code TOOK10 for 10% off · <Link to="/shipping-returns">Free 14-day returns</Link>
-      </div>
+      <AnnouncementBar />
       <Header />
       <main id="main" tabIndex={-1} style={{ outline: 'none' }}>
         {children}
       </main>
       <Footer />
       <Toasts />
+      <PromoPopup />
     </>
   );
 }
