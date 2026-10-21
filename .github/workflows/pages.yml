@@ -1,9 +1,11 @@
-name: CI & Deploy
+name: Prototype (GitHub Pages)
 
 on:
   push:
     branches: ['**']
+    paths: ['prototype/**', '.github/workflows/pages.yml']
   pull_request:
+    paths: ['prototype/**', '.github/workflows/pages.yml']
   workflow_dispatch:
 
 permissions:

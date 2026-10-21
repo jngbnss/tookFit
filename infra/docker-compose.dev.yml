@@ -1,0 +1,54 @@
+# 로컬 개발용: PostgreSQL + SeaweedFS(S3 호환, 운영의 R2/S3 대용)
+# 실행: docker compose -f infra/docker-compose.dev.yml up -d
+name: tukfit-dev
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: tukfit
+      POSTGRES_USER: tukfit
+      POSTGRES_PASSWORD: tukfit
+      TZ: Asia/Seoul
+    ports:
+      - "5433:5432"   # 호스트 5432는 다른 프로젝트와 겹치지 않게 5433 사용
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U tukfit -d tukfit"]
+      interval: 5s
+      retries: 10
+
+  # S3 API: http://localhost:8333  (access key tukfit / tukfit-secret, 버킷 tukfit은 공개 읽기)
+  s3:
+    image: chrislusf/seaweedfs:4.48
+    command: server -dir=/data -s3 -s3.port=8333 -s3.config=/etc/seaweedfs/s3.json -s3.allowedOrigins=*
+    ports:
+      - "8333:8333"
+    volumes:
+      - ./dev/s3.json:/etc/seaweedfs/s3.json:ro
+      - s3data:/data
+
+  # 버킷을 만들고 프로토타입 이미지를 개발용 상품·배너 사진으로 올린다.
+  s3-init:
+    image: amazon/aws-cli:2.27.0
+    depends_on:
+      - s3
+    environment:
+      AWS_ACCESS_KEY_ID: tukfit
+      AWS_SECRET_ACCESS_KEY: tukfit-secret
+      AWS_DEFAULT_REGION: us-east-1
+    volumes:
+      - ../prototype/public/images:/seed:ro
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        until aws --endpoint-url http://s3:8333 s3 ls >/dev/null 2>&1; do sleep 2; done
+        aws --endpoint-url http://s3:8333 s3 mb s3://tukfit 2>/dev/null || true
+        aws --endpoint-url http://s3:8333 s3 sync /seed/products s3://tukfit/products --only-show-errors
+        aws --endpoint-url http://s3:8333 s3 sync /seed/editorial s3://tukfit/banners --only-show-errors
+        echo "seed images uploaded"
+
+volumes:
+  pgdata:
+  s3data:

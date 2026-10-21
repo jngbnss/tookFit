@@ -1,0 +1,13 @@
+{
+  "identities": [
+    {
+      "name": "tukfit",
+      "credentials": [{ "accessKey": "tukfit", "secretKey": "tukfit-secret" }],
+      "actions": ["Admin", "Read", "List", "Tagging", "Write"]
+    },
+    {
+      "name": "anonymous",
+      "actions": ["Read:tukfit"]
+    }
+  ]
+}

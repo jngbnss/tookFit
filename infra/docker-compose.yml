@@ -1,0 +1,84 @@
+# 운영 서버(카페24 VPS)용. 서버의 /opt/tukfit 에서 실행한다.
+#   docker compose --env-file .env up -d
+# 이미지는 GitHub Actions가 GHCR에 올리고, 배포 시 IMAGE_TAG로 버전을 고른다.
+name: tukfit
+
+services:
+  nginx:
+    image: nginx:1.29-alpine
+    restart: unless-stopped
+    depends_on:
+      - frontend
+      - backend
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      DOMAIN: ${DOMAIN:-}
+    volumes:
+      - ./nginx/templates:/etc/nginx/tukfit-templates:ro
+      - ./nginx/select-config.sh:/tukfit/select-config.sh:ro
+      - certbot-www:/var/www/certbot:ro
+      - letsencrypt:/etc/letsencrypt:ro
+    # 시작할 때 HTTP/HTTPS 설정을 고르고, 인증서 갱신을 반영하도록 6시간마다 설정을 다시 읽는다.
+    command: /bin/sh -c 'sh /tukfit/select-config.sh && { while :; do sleep 6h; nginx -s reload; done & } && exec nginx -g "daemon off;"'
+
+  certbot:
+    image: certbot/certbot:v4.1.1
+    restart: unless-stopped
+    volumes:
+      - certbot-www:/var/www/certbot
+      - letsencrypt:/etc/letsencrypt
+    entrypoint: /bin/sh -c 'trap exit TERM; while :; do certbot renew --webroot -w /var/www/certbot --quiet; sleep 12h & wait $${!}; done'
+
+  frontend:
+    image: ghcr.io/${GHCR_OWNER:-jngbnss}/tukfit-frontend:${IMAGE_TAG:-latest}
+    restart: unless-stopped
+    depends_on:
+      backend:
+        condition: service_healthy
+    environment:
+      INTERNAL_API_URL: http://backend:8080
+      SITE_URL: ${SITE_URL}
+
+  backend:
+    image: ghcr.io/${GHCR_OWNER:-jngbnss}/tukfit-backend:${IMAGE_TAG:-latest}
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    env_file: .env
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      DB_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB}
+      DB_USERNAME: ${POSTGRES_USER}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      APP_FRONTEND_URL: ${SITE_URL}
+      TZ: Asia/Seoul
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/actuator/health || curl -fsS http://localhost:8080/actuator/health"]
+      interval: 15s
+      timeout: 5s
+      start_period: 90s
+      retries: 5
+
+  postgres:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      TZ: Asia/Seoul
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      retries: 10
+    # 포트를 외부에 열지 않는다. 접속이 필요하면 SSH 터널을 쓴다.
+
+volumes:
+  pgdata:
+  letsencrypt:
+  certbot-www:
