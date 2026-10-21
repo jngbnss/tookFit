@@ -1,0 +1,28 @@
+# 로컬 개발: infra/docker-compose.dev.yml 의 PostgreSQL(5433), SeaweedFS(8333)를 쓴다.
+spring:
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5433/tukfit}
+    username: ${DB_USERNAME:tukfit}
+    password: ${DB_PASSWORD:tukfit}
+
+server:
+  port: ${PORT:8081}
+
+app:
+  frontend-url: ${APP_FRONTEND_URL:http://localhost:3000}
+  docs-public: true
+  jwt:
+    secret: ${JWT_SECRET:dev-only-secret-change-me-0123456789abcdef}
+  cookie:
+    secure: ${COOKIE_SECURE:false}
+  storage:
+    endpoint: ${S3_ENDPOINT:http://localhost:8333}
+    region: ${S3_REGION:us-east-1}
+    bucket: ${S3_BUCKET:tukfit}
+    access-key: ${S3_ACCESS_KEY:tukfit}
+    secret-key: ${S3_SECRET_KEY:tukfit-secret}
+    public-base-url: ${S3_PUBLIC_BASE_URL:http://localhost:8333/tukfit}
+
+logging:
+  level:
+    com.tukfit: debug

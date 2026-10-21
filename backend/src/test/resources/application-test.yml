@@ -1,0 +1,7 @@
+app:
+  frontend-url: http://localhost:3000
+  docs-public: true
+  jwt:
+    secret: test-only-secret-0123456789abcdef0123456789
+  cookie:
+    secure: false

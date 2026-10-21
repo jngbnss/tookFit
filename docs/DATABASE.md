@@ -348,6 +348,29 @@ PENDING_PAYMENT ─결제 승인─▶ PAID ─▶ PREPARING ─▶ SHIPPED ─�
 | pinned | BOOLEAN NOT NULL | 상단 고정 |
 | published | BOOLEAN NOT NULL | |
 
+**store_settings**: 한 행(`id = 1`)만 둡니다. 관리자 설정 화면에서 수정합니다.
+
+| 컬럼 | 타입 | 설명 |
+|---|---|---|
+| id | BIGINT PK CHECK (id = 1) | |
+| store_name | VARCHAR(100) NOT NULL | |
+| shipping_fee / free_shipping_threshold | BIGINT NOT NULL | 기본 3,000 / 50,000 |
+| max_quantity_per_item | INT NOT NULL | 기본 5 |
+| return_shipping_fee | BIGINT NOT NULL | 단순 변심 반품 왕복 배송비, 기본 6,000 |
+| cs_phone, cs_email, cs_hours | | 고객센터 |
+| company_name, ceo_name, registration_number, mail_order_number, business_address, privacy_officer | | 사업자 정보. 비어 있으면 화면에 "준비 중" |
+
+### 구현하면서 추가한 테이블·컬럼
+
+- **password_reset_tokens** (`user_id`, `token_hash` UNIQUE, `expires_at`, `used_at`): 비밀번호 재설정 링크 (30분)
+- **payment_webhook_events** (`provider`, `event_key`, `payload` JSONB, UNIQUE (provider, event_key)): 같은 웹훅을 두 번 처리하지 않기 위한 기록
+- `orders.order_name`(결제창 표시용 "상품명 외 N건"), `orders.coupon_code`(스냅샷), `orders.from_cart`(결제 후 장바구니에서 지울지)
+- `order_items.product_slug`(상품 링크용 스냅샷)
+- `reviews.option_label`("블랙 / M" 스냅샷), `reviews.order_item_id`는 NULL 허용(개발용 데모 리뷰)
+- `product_colors.hex`는 `VARCHAR(7)`
+
+실제 스키마는 `backend/src/main/resources/db/migration/V1__init.sql`이 기준입니다.
+
 ## 핵심 규칙
 
 **재고 차감**: 결제 승인 시점에 조건부 UPDATE로 원자적으로 줄입니다. 재고가 부족하면 결제를 바로 취소합니다.
