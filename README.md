@@ -8,4 +8,4 @@
 | `backend/` | Spring Boot API (JPA, PostgreSQL) | 준비 중 |
 | `infra/` | Docker Compose, Nginx 설정 | 준비 중 |
 | `prototype/` | 기존 React/Vite 디자인 프로토타입 ([데모](https://jngbnss.github.io/tukFit/)) | 운영 중 |
-| `docs/` | 설계 문서 | |
+| `docs/` | 설계 문서 (아키텍처, DB, API, 로드맵) | |

@@ -67,7 +67,7 @@ GitHub Actions
 
 ## 다음 작업
 
-1. 저장소 폴더 구조 (모노레포: `frontend/`, `backend/`, `infra/`)
-2. DB 테이블 설계 (회원, 상품, 옵션, 장바구니, 주문, 결제, 리뷰, 배너)
-3. API 설계
-4. 개발 환경 구성 (로컬 Docker Compose)
+1. ~~저장소 폴더 구조~~ ✅
+2. ~~DB 테이블 설계~~ ✅ [DATABASE.md](DATABASE.md)
+3. ~~API 설계~~ ✅ [API.md](API.md)
+4. 이후 전체 일정은 [ROADMAP.md](ROADMAP.md)
